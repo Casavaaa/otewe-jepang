@@ -130,277 +130,292 @@
                     </button>
                 </div>
 
-                <!-- Difficulty Selector (Visible only in Quiz Mode) -->
-                <div id="difficulty-selector-container" class="hidden bg-white/70 p-4 rounded-2xl border border-white/80 shadow-sm space-y-2">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-sliders text-indigo-500 mr-1"></i> Pilih Tingkat Kesulitan:</span>
-                        <span id="high-score-display" class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
-                            <i class="fa-solid fa-trophy mr-1"></i> Rekor: 0
-                        </span>
+                <!-- Difficulty Selector Container (Visible only in Quiz mode) -->
+                <div id="difficulty-selector-container" class="hidden space-y-2">
+                    <div class="text-center">
+                        <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">Tingkat Kesulitan Kuis</span>
                     </div>
                     <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setDifficulty('easy')" id="diff-btn-easy" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-indigo-600 text-white border-indigo-600 shadow-sm">
-                            Mudah<br><span class="text-[10px] opacity-80">(10 Soal)</span>
+                        <button id="diff-btn-easy" onclick="setDifficulty('easy')" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-indigo-600 text-white border-indigo-600 shadow-sm flex flex-col items-center">
+                            <span>Mudah</span>
+                            <span class="text-[10px] opacity-80">10 Soal</span>
                         </button>
-                        <button onclick="setDifficulty('medium')" id="diff-btn-medium" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50">
-                            Sedang<br><span class="text-[10px] text-slate-400">(25 Soal)</span>
+                        <button id="diff-btn-medium" onclick="setDifficulty('medium')" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50 flex flex-col items-center">
+                            <span>Sedang</span>
+                            <span class="text-[10px] text-slate-400">25 Soal</span>
                         </button>
-                        <button onclick="setDifficulty('hard')" id="diff-btn-hard" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50">
-                            Sulit<br><span class="text-[10px] text-slate-400">(50 Soal)</span>
+                        <button id="diff-btn-hard" onclick="setDifficulty('hard')" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50 flex flex-col items-center">
+                            <span>Sulit</span>
+                            <span class="text-[10px] text-slate-400">50 Soal</span>
                         </button>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <!-- Topic Hiragana -->
-                    <div class="p-5 rounded-2xl bg-gradient-to-br from-rose-50 to-pink-100/70 border border-rose-200/60 text-left flex flex-col justify-between group">
-                        <div>
-                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform japanese-font">あ</div>
-                            <h3 class="font-bold text-slate-800 text-lg">Hiragana</h3>
-                            <p class="text-xs text-slate-500 mt-1">Huruf dasar Jepang (あ, い, う, え, お)</p>
-                        </div>
-                        <div class="mt-4 pt-2 border-t border-rose-200/40 flex flex-col gap-2">
-                            <button onclick="selectCategory('hiragana', 'study')" class="btn-action-study w-full py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-graduation-cap"></i> Belajar Huruf
-                            </button>
-                            <button onclick="selectCategory('hiragana', 'quiz')" class="btn-action-quiz hidden w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-play"></i> Mulai Kuis
-                            </button>
-                        </div>
-                    </div>
+                <!-- High Score Banner -->
+                <div id="high-score-display" class="text-center text-xs font-bold text-amber-600 bg-amber-50/80 py-2 px-4 rounded-xl border border-amber-200/60">
+                    <i class="fa-solid fa-trophy mr-1"></i> Rekor: 0
+                </div>
 
-                    <!-- Topic Katakana -->
-                    <div class="p-5 rounded-2xl bg-gradient-to-br from-sky-50 to-indigo-100/70 border border-sky-200/60 text-left flex flex-col justify-between group">
-                        <div>
-                            <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform japanese-font">ア</div>
-                            <h3 class="font-bold text-slate-800 text-lg">Katakana</h3>
-                            <p class="text-xs text-slate-500 mt-1">Kata serapan asing (ア, イ, ウ, エ, オ)</p>
-                        </div>
-                        <div class="mt-4 pt-2 border-t border-sky-200/40 flex flex-col gap-2">
-                            <button onclick="selectCategory('katakana', 'study')" class="btn-action-study w-full py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-graduation-cap"></i> Belajar Huruf
-                            </button>
-                            <button onclick="selectCategory('katakana', 'quiz')" class="btn-action-quiz hidden w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-play"></i> Mulai Kuis
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Topic Vocabulary -->
-                    <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-100/70 border border-emerald-200/60 text-left flex flex-col justify-between group">
-                        <div>
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform">
-                                <i class="fa-solid fa-language"></i>
+                <!-- Materials Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Hiragana -->
+                    <div class="p-4 rounded-2xl bg-white/70 border border-white hover:border-indigo-300 transition-all shadow-sm flex flex-col justify-between space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xl japanese-font">あ</div>
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-sm">Hiragana</h3>
+                                <p class="text-[11px] text-slate-500">46 Aksara Dasar Gojuon</p>
                             </div>
-                            <h3 class="font-bold text-slate-800 text-lg">Kosakata</h3>
-                            <p class="text-xs text-slate-500 mt-1">Ungkapan & kata sehari-hari</p>
                         </div>
-                        <div class="mt-4 pt-2 border-t border-emerald-200/40 flex flex-col gap-2">
-                            <button onclick="selectCategory('vocab', 'study')" class="btn-action-study w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-graduation-cap"></i> Belajar Kartu
+                        <div class="flex gap-2">
+                            <button onclick="selectCategory('hiragana', 'study')" class="btn-action-study flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-bold text-xs transition-all">
+                                <i class="fa-solid fa-book-open mr-1"></i> Belajar
                             </button>
-                            <button onclick="selectCategory('vocab', 'quiz')" class="btn-action-quiz hidden w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
-                                <i class="fa-solid fa-play"></i> Mulai Kuis
+                            <button onclick="selectCategory('hiragana', 'quiz')" class="btn-action-quiz hidden flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition-all shadow-sm">
+                                <i class="fa-solid fa-play mr-1"></i> Kuis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Katakana -->
+                    <div class="p-4 rounded-2xl bg-white/70 border border-white hover:border-indigo-300 transition-all shadow-sm flex flex-col justify-between space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center font-bold text-xl japanese-font">ア</div>
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-sm">Katakana</h3>
+                                <p class="text-[11px] text-slate-500">46 Aksara Kata Serapan</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="selectCategory('katakana', 'study')" class="btn-action-study flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-bold text-xs transition-all">
+                                <i class="fa-solid fa-book-open mr-1"></i> Belajar
+                            </button>
+                            <button onclick="selectCategory('katakana', 'quiz')" class="btn-action-quiz hidden flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition-all shadow-sm">
+                                <i class="fa-solid fa-play mr-1"></i> Kuis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Gabungan Huruf (Iqro Style) -->
+                    <div class="p-4 rounded-2xl bg-white/70 border border-white hover:border-indigo-300 transition-all shadow-sm flex flex-col justify-between space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg japanese-font">あい</div>
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-sm">Gabungan Huruf</h3>
+                                <p class="text-[11px] text-slate-500">150 Suku Kata (2-4 Huruf)</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="selectCategory('iqro', 'study')" class="btn-action-study flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-bold text-xs transition-all">
+                                <i class="fa-solid fa-book-open mr-1"></i> Belajar
+                            </button>
+                            <button onclick="selectCategory('iqro', 'quiz')" class="btn-action-quiz hidden flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition-all shadow-sm">
+                                <i class="fa-solid fa-play mr-1"></i> Kuis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Kosakata (Vocab) -->
+                    <div class="p-4 rounded-2xl bg-white/70 border border-white hover:border-indigo-300 transition-all shadow-sm flex flex-col justify-between space-y-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xl japanese-font">語</div>
+                            <div>
+                                <h3 class="font-extrabold text-slate-800 text-sm">Kosakata</h3>
+                                <p class="text-[11px] text-slate-500">150 Kata Sehari-hari</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="selectCategory('vocab', 'study')" class="btn-action-study flex-1 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-xl font-bold text-xs transition-all">
+                                <i class="fa-solid fa-book-open mr-1"></i> Belajar
+                            </button>
+                            <button onclick="selectCategory('vocab', 'quiz')" class="btn-action-quiz hidden flex-1 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold text-xs transition-all shadow-sm">
+                                <i class="fa-solid fa-play mr-1"></i> Kuis
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-2 text-center">
-                    <p id="mode-tip-text" class="text-xs text-slate-400"><i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Mode Belajar: Ketuk kartu untuk membalik & dengarkan suara pelafalannya!</p>
+                <div class="text-center">
+                    <p id="mode-tip-text" class="text-xs text-slate-500 italic">
+                        <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Mode Belajar: Ketuk kartu untuk membalik & dengarkan suara pelafalannya!
+                    </p>
                 </div>
             </section>
 
-            <!-- SECTION 2: STUDY MODE (FLASHCARD VIEW) -->
-            <section id="study-screen" class="hidden space-y-6">
-                <!-- Top Navigation Bar -->
-                <div class="flex items-center justify-between text-xs font-bold text-slate-600 border-b border-slate-100 pb-3">
-                    <button onclick="backToMenu()" class="text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1">
+            <!-- SECTION 2: MODE BELAJAR (FLASHCARD SCREEN) -->
+            <section id="study-screen" class="hidden space-y-5">
+                <div class="flex items-center justify-between">
+                    <button onclick="backToMenu()" class="text-xs font-bold text-slate-500 hover:text-slate-800 transition-all flex items-center gap-1">
                         <i class="fa-solid fa-arrow-left"></i> Menu Utama
                     </button>
-                    <span id="study-title-badge" class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-bold">
-                        Hiragana
-                    </span>
-                    <span id="study-counter" class="text-slate-500">1 / 25</span>
+                    <span id="study-title-badge" class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full font-bold text-xs">Hiragana</span>
+                    <button onclick="toggleGridOverview()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-all flex items-center gap-1">
+                        <i class="fa-solid fa-grid-2"></i> Daftar Huruf
+                    </button>
                 </div>
 
-                <!-- Interactive Flashcard Component -->
-                <div class="flip-card w-full h-72 cursor-pointer" id="flashcard-element" onclick="flipCard()">
-                    <div class="flip-card-inner w-full h-full relative rounded-2xl shadow-md border border-slate-100">
-                        <!-- FRONT SIDE -->
-                        <div class="flip-card-front absolute inset-0 bg-white rounded-2xl flex flex-col items-center justify-center p-6 text-center space-y-2">
-                            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Klik/Sentuh Untuk Membalik Kartu</span>
-                            <!-- Character -->
-                            <div id="study-char-front" class="japanese-font text-5xl sm:text-6xl font-extrabold text-slate-800">
-                                あ
+                <!-- Grid Overview Container (Hidden by default) -->
+                <div id="grid-overview-container" class="hidden bg-slate-100/90 p-3 rounded-2xl border border-slate-200">
+                    <span class="text-xs font-bold text-slate-600 block mb-2">Pilih Karakter Langsung:</span>
+                    <div id="grid-overview-items" class="grid grid-cols-5 sm:grid-cols-8 gap-1.5 max-h-48 overflow-y-auto p-1">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- 3D Flashcard Container -->
+                <div class="flip-card w-full h-72 sm:h-80 cursor-pointer" id="flashcard-element" onclick="flipCard()">
+                    <div class="flip-card-inner relative w-full h-full">
+                        <!-- Front of Card -->
+                        <div class="flip-card-front absolute w-full h-full bg-gradient-to-br from-white to-slate-50 rounded-3xl p-6 border border-slate-200 shadow-md flex flex-col justify-between items-center">
+                            <div class="w-full flex justify-between items-center text-xs text-slate-400 font-semibold">
+                                <span id="study-counter">1 / 46</span>
+                                <span><i class="fa-solid fa-rotate-right mr-1"></i> Ketuk untuk balik</span>
                             </div>
-                            <!-- Pronunciation / Romaji (Front View) -->
-                            <div class="inline-block bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100/80">
-                                <span class="text-xs text-slate-400 font-semibold mr-1">Cara Baca:</span>
-                                <span id="study-romaji-front" class="text-sm font-extrabold text-indigo-600">a</span>
+                            <div class="text-center my-auto">
+                                <span id="study-char-front" class="japanese-font text-6xl sm:text-7xl font-bold text-slate-800 block">あ</span>
+                                <span id="study-romaji-front" class="inline-block mt-3 px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-extrabold border border-indigo-100">
+                                    Cara Baca: a
+                                </span>
                             </div>
-                            <!-- Audio Button -->
-                            <button onclick="speakCurrent(event)" class="mt-1 w-9 h-9 rounded-full bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-600 flex items-center justify-center transition-all shadow-sm" title="Dengarkan Suara">
-                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            <button onclick="speakCurrent(event)" class="py-2 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full text-xs font-bold transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-volume-high text-indigo-500"></i> Dengarkan Suara
                             </button>
                         </div>
-
-                        <!-- BACK SIDE -->
-                        <div class="flip-card-back absolute inset-0 bg-gradient-to-br from-indigo-600 to-violet-700 text-white rounded-2xl flex flex-col items-center justify-center p-6 text-center space-y-2">
-                            <span class="text-[10px] text-indigo-200 uppercase tracking-wider font-semibold">Detail Pelafalan & Arti</span>
-                            <div id="study-romaji-back" class="text-3xl font-extrabold tracking-wide">
-                                a
+                        <!-- Back of Card -->
+                        <div class="flip-card-back absolute w-full h-full bg-gradient-to-br from-indigo-600 to-purple-600 text-white rounded-3xl p-6 shadow-md flex flex-col justify-between items-center">
+                            <div class="w-full flex justify-between items-center text-xs text-indigo-200 font-semibold">
+                                <span>Penjelasan</span>
+                                <span><i class="fa-solid fa-rotate-right mr-1"></i> Ketuk untuk balik</span>
                             </div>
-                            <div id="study-meaning-back" class="text-sm text-indigo-100 font-semibold bg-white/10 px-3 py-1 rounded-lg">
-                                Suara Vokal "A"
+                            <div class="text-center my-auto space-y-2">
+                                <span class="text-xs uppercase tracking-widest text-indigo-200 font-bold block">Pelafalan / Romaji</span>
+                                <h3 id="study-romaji-back" class="text-4xl font-extrabold text-white tracking-wide">a</h3>
+                                <p id="study-meaning-back" class="text-sm font-semibold text-indigo-100">Vokal 'A'</p>
+                                <span id="study-hint-back" class="inline-block px-3 py-1 bg-white/20 rounded-full text-xs text-indigo-100">Hint</span>
                             </div>
-                            <p id="study-hint-back" class="text-xs text-indigo-200 italic max-w-xs">
-                                Dibaca dibibir seperti huruf 'a' pada kata "Aku"
-                            </p>
-                            <button onclick="speakCurrent(event)" class="mt-2 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-semibold flex items-center gap-2 transition-all">
-                                <i class="fa-solid fa-volume-high"></i> Putar Suara
+                            <button onclick="speakCurrent(event)" class="py-2 px-4 bg-white/20 hover:bg-white/30 text-white rounded-full text-xs font-bold transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-volume-high text-amber-300"></i> Dengarkan Lagi
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Navigation Controls -->
-                <div class="flex items-center justify-between gap-3">
-                    <button onclick="prevStudyCard()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1">
-                        <i class="fa-solid fa-chevron-left"></i> Sebelumnya
+                <!-- Flashcard Controls -->
+                <div class="flex items-center gap-3">
+                    <button onclick="prevStudyCard()" class="flex-1 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-2xl font-bold text-xs transition-all shadow-sm">
+                        <i class="fa-solid fa-chevron-left mr-1"></i> Sebelumnya
                     </button>
-                    <button onclick="toggleGridOverview()" class="py-2.5 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold rounded-xl text-xs transition-all shadow-sm" title="Daftar Semua Huruf">
-                        <i class="fa-solid fa-table-cells"></i>
-                    </button>
-                    <button onclick="nextStudyCard()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1 shadow-sm">
-                        Berikutnya <i class="fa-solid fa-chevron-right"></i>
+                    <button onclick="nextStudyCard()" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xs transition-all shadow-sm">
+                        Berikutnya <i class="fa-solid fa-chevron-right ml-1"></i>
                     </button>
                 </div>
 
-                <!-- Grid Quick Selection Modal / Collapsible -->
-                <div id="grid-overview-container" class="hidden bg-white/90 p-4 rounded-2xl border border-slate-200 max-h-48 overflow-y-auto">
-                    <p class="text-xs font-bold text-slate-500 mb-2">Pilih Karakter Langsung:</p>
-                    <div id="grid-overview-items" class="grid grid-cols-5 sm:grid-cols-8 gap-2">
-                        <!-- Dynamic items -->
-                    </div>
-                </div>
-
-                <!-- CTA to Quiz -->
-                <div class="pt-2">
-                    <button onclick="startQuizFromStudy()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-gamepad text-sm"></i> Uji Kemampuan (Mulai Kuis Soal Ini)
+                <div class="text-center pt-2">
+                    <button onclick="startQuizFromStudy()" class="w-full py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-2xl font-extrabold text-xs transition-all shadow-md">
+                        <i class="fa-solid fa-circle-play mr-1.5"></i> Uji Kemampuan (Mulai Kuis Soal Ini)
                     </button>
                 </div>
             </section>
 
-            <!-- SECTION 3: QUIZ GAMEPLAY -->
+            <!-- SECTION 3: MODE KUIS (QUIZ SCREEN) -->
             <section id="quiz-screen" class="hidden space-y-6">
-                <!-- TOP BAR: PROGRESS & STATS -->
-                <div class="space-y-2">
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-600">
-                        <button onclick="showCustomConfirm()" class="text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1 py-1 px-2 rounded-lg hover:bg-slate-100">
-                            <i class="fa-solid fa-xmark text-base"></i> Keluar
-                        </button>
-                        <div class="flex items-center gap-4">
-                            <span id="streak-counter" class="text-amber-500 flex items-center gap-1">
-                                <i class="fa-solid fa-fire"></i> <span id="streak-val">0</span>
-                            </span>
-                            <span class="text-slate-700 bg-white/80 px-2.5 py-1 rounded-full border border-slate-200 shadow-sm">
-                                Skor: <span id="score-val" class="text-indigo-600">0</span>
-                            </span>
+                <!-- Top Nav & Stats -->
+                <div class="flex items-center justify-between">
+                    <button onclick="showCustomConfirm()" class="text-xs font-bold text-slate-500 hover:text-rose-500 transition-all">
+                        <i class="fa-solid fa-xmark mr-1"></i> Keluar
+                    </button>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-1.5 text-xs font-extrabold text-amber-500">
+                            <i class="fa-solid fa-fire text-amber-500"></i>
+                            <span id="streak-val">0</span>
+                        </div>
+                        <div class="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 rounded-full text-xs font-extrabold">
+                            Skor: <span id="score-val">0</span>
                         </div>
                     </div>
-
-                    <!-- Progress Bar -->
-                    <div class="w-full bg-slate-200/70 h-2.5 rounded-full overflow-hidden">
-                        <div id="progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-300 rounded-full"></div>
-                    </div>
                 </div>
 
-                <!-- QUESTION DISPLAY AREA -->
-                <div id="question-card" class="bg-white/90 rounded-2xl p-6 sm:p-8 text-center border border-slate-100 shadow-sm relative transition-all duration-200">
-                    <span id="question-index" class="absolute top-3 left-4 text-xs font-bold text-slate-400">Soal 1/10</span>
-                    
-                    <!-- Sound Replay Button -->
-                    <button onclick="repeatQuestionAudio()" class="absolute top-3 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 flex items-center justify-center transition-all shadow-sm" title="Dengar Suara Lagi">
-                        <i class="fa-solid fa-volume-high text-xs"></i>
+                <!-- Dynamic Progress Bar -->
+                <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 10%;"></div>
+                </div>
+
+                <!-- Question Card -->
+                <div id="question-card" class="relative p-6 sm:p-8 bg-white/90 rounded-3xl border border-slate-100 shadow-sm text-center space-y-4">
+                    <!-- Audio replay button -->
+                    <button onclick="repeatQuestionAudio()" class="absolute top-4 right-4 w-9 h-9 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-sm transition-all shadow-sm" title="Dengarkan Suara">
+                        <i class="fa-solid fa-volume-high"></i>
                     </button>
-
-                    <!-- Pronunciation / Romaji display above the main character -->
-                    <div id="question-pronunciation-badge" class="mt-2 inline-block bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
-                        <span class="text-xs text-slate-400 font-semibold mr-1">Cara Baca:</span>
-                        <span id="question-romaji" class="text-xs font-bold text-indigo-600"></span>
+                    <span id="question-index" class="text-xs font-bold text-slate-400 uppercase tracking-widest block">Soal 1/10</span>
+                    
+                    <div id="question-pronunciation-badge" class="hidden">
+                        <span id="question-romaji" class="inline-block px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full text-xs font-extrabold">
+                            romaji
+                        </span>
                     </div>
 
-                    <div id="question-char" class="japanese-font text-5xl sm:text-6xl font-extrabold text-slate-800 my-3 tracking-wide">
-                        あ
-                    </div>
-                    <p id="question-prompt" class="text-xs text-slate-500 font-medium">Pilih Romaji / Arti yang benar:</p>
+                    <h3 id="question-char" class="japanese-font text-6xl sm:text-7xl font-extrabold text-slate-800 my-2">あ</h3>
+                    <p id="question-instruction" class="text-xs font-bold text-slate-500">Pilih jawaban yang paling tepat!</p>
                 </div>
 
-                <!-- OPTIONS GRID -->
+                <!-- Answer Options Grid -->
                 <div id="options-container" class="grid grid-cols-2 gap-3">
-                    <!-- Dynamic Answer Buttons will be injected here -->
+                    <!-- Options populated via JS -->
                 </div>
 
-                <!-- FEEDBACK / EXPLANATION MODAL -->
-                <div id="feedback-banner" class="hidden p-4 rounded-xl text-center space-y-2 transition-all">
-                    <div class="flex items-center justify-center gap-2 font-bold text-sm" id="feedback-title">
-                        <!-- Filled dynamically -->
-                    </div>
-                    <div id="feedback-detail" class="text-xs space-y-0.5">
-                        <!-- Filled dynamically -->
-                    </div>
-                    <button id="next-btn" onclick="nextQuestion()" class="mt-2 w-full py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-700 active:scale-95 transition-all">
-                        Lanjut Soal Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                <!-- Feedback Banner -->
+                <div id="feedback-banner" class="hidden p-4 rounded-2xl text-center space-y-1">
+                    <h4 id="feedback-title" class="font-extrabold text-sm"></h4>
+                    <p id="feedback-detail" class="text-xs"></p>
+                    <button onclick="nextQuestion()" class="mt-2 py-2 px-6 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-900 transition-all">
+                        Lanjut Soal <i class="fa-solid fa-arrow-right ml-1"></i>
                     </button>
                 </div>
             </section>
 
-            <!-- SECTION 3: END RESULT SCREEN -->
+            <!-- SECTION 4: RESULT SCREEN -->
             <section id="result-screen" class="hidden text-center space-y-6">
-                <div class="py-4">
-                    <div id="result-badge" class="w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-3xl mb-3 shadow-inner">
-                        <i class="fa-solid fa-trophy"></i>
-                    </div>
-                    <h2 class="text-2xl font-extrabold text-slate-800">Selesai!</h2>
-                    <p id="result-subtitle" class="text-xs text-slate-500 mt-1">Kerja bagus, tetap pertahankan!</p>
+                <div id="result-badge" class="w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-3xl shadow-inner">
+                    <i class="fa-solid fa-trophy"></i>
                 </div>
 
-                <!-- NEW HIGH SCORE NOTIFICATION -->
-                <div id="new-highscore-badge" class="hidden bg-amber-400 text-slate-900 font-extrabold py-2 px-4 rounded-xl text-xs animate-bounce shadow-md">
-                    🎉 REKOR SKOR BARU DITERAPKAN! 🎉
+                <div class="space-y-1">
+                    <h2 class="text-2xl font-extrabold text-slate-800">Kuis Selesai!</h2>
+                    <p id="result-subtitle" class="text-xs text-slate-500">Hasil evaluasi belajar kamu</p>
+                    <span id="summary-diff-label" class="inline-block mt-2 px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[11px] font-bold">HIRAGANA - Mudah</span>
                 </div>
 
-                <!-- SCORE STATS BOX -->
-                <div class="grid grid-cols-3 gap-3 bg-white/70 p-4 rounded-2xl border border-white/80 shadow-sm">
-                    <div class="p-2">
-                        <span class="block text-xs text-slate-400 font-medium">Skor Akhir</span>
-                        <span id="final-score" class="text-xl sm:text-2xl font-bold text-indigo-600">0</span>
+                <div id="new-highscore-badge" class="hidden bg-gradient-to-r from-amber-500 to-rose-500 text-white font-extrabold text-xs py-1.5 px-4 rounded-full shadow-md inline-block animate-pulse">
+                    <i class="fa-solid fa-star mr-1"></i> REKOR BARU TERCAPAI! <i class="fa-solid fa-star ml-1"></i>
+                </div>
+
+                <!-- Stats Summary Grid -->
+                <div class="grid grid-cols-3 gap-3 p-4 bg-slate-100/80 rounded-2xl border border-slate-200/60">
+                    <div class="text-center">
+                        <span class="text-[10px] text-slate-400 font-extrabold uppercase">Skor Akhir</span>
+                        <h4 id="final-score" class="text-xl font-extrabold text-indigo-600">0</h4>
                     </div>
-                    <div class="p-2 border-x border-slate-200">
-                        <span class="block text-xs text-slate-400 font-medium">Akurasi</span>
-                        <span id="final-accuracy" class="text-xl sm:text-2xl font-bold text-emerald-600">0%</span>
+                    <div class="text-center">
+                        <span class="text-[10px] text-slate-400 font-extrabold uppercase">Akurasi</span>
+                        <h4 id="final-accuracy" class="text-xl font-extrabold text-emerald-600">0%</h4>
                     </div>
-                    <div class="p-2">
-                        <span class="block text-xs text-slate-400 font-medium">Max Streak</span>
-                        <span id="final-streak" class="text-xl sm:text-2xl font-bold text-amber-500">0</span>
+                    <div class="text-center">
+                        <span class="text-[10px] text-slate-400 font-extrabold uppercase">Max Streak</span>
+                        <h4 id="final-streak" class="text-xl font-extrabold text-amber-500">0</h4>
                     </div>
                 </div>
 
-                <!-- HIGH SCORE BOARD SUMMARY -->
-                <div class="bg-indigo-50/80 p-3 rounded-xl border border-indigo-100 text-xs font-semibold text-indigo-700 flex justify-between items-center">
-                    <span>Rekor Tertinggi (<span id="summary-diff-label">Mudah</span>):</span>
-                    <span id="summary-highscore-val" class="font-extrabold text-indigo-900">0</span>
+                <div class="text-xs font-bold text-slate-500 bg-white/60 p-2.5 rounded-xl border border-white">
+                    <i class="fa-solid fa-award text-amber-500 mr-1"></i> Skor Tertinggi Kategori Ini: <span id="summary-highscore-val" class="text-slate-800 font-extrabold">0</span>
                 </div>
 
-                <!-- ACTION BUTTONS -->
-                <div class="space-y-2 pt-2">
-                    <button onclick="restartCurrentGame()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-98">
-                        <i class="fa-solid fa-rotate-right mr-1.5"></i> Main Lagi (Acak Ulang)
+                <!-- Actions -->
+                <div class="flex gap-3">
+                    <button onclick="backToMenu()" class="flex-1 py-3 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-2xl font-bold text-xs transition-all shadow-sm">
+                        <i class="fa-solid fa-house mr-1"></i> Menu Utama
                     </button>
-                    <button onclick="backToMenu()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all">
-                        <i class="fa-solid fa-house mr-1.5"></i> Kembali ke Menu
+                    <button onclick="restartCurrentGame()" class="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xs transition-all shadow-sm">
+                        <i class="fa-solid fa-rotate-right mr-1"></i> Main Lagi
                     </button>
                 </div>
             </section>
@@ -408,21 +423,21 @@
         </main>
     </div>
 
-    <!-- CUSTOM CONFIRMATION MODAL -->
-    <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-all">
-        <div class="bg-white rounded-2xl p-6 max-w-xs w-full text-center space-y-4 shadow-xl border border-slate-100 animate-correct">
-            <div class="w-12 h-12 mx-auto rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    <!-- CUSTOM CONFIRM MODAL FOR EXITING QUIZ -->
+    <div id="custom-confirm-modal" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full text-center space-y-4 shadow-xl border border-slate-100">
+            <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-500 mx-auto flex items-center justify-center text-xl">
+                <i class="fa-solid fa-circle-question"></i>
             </div>
             <div>
-                <h3 class="font-bold text-slate-800 text-base">Keluar dari Kuis?</h3>
-                <p class="text-xs text-slate-500 mt-1">Progres skor dan streak di ronde ini akan hilang.</p>
+                <h3 class="font-extrabold text-slate-800 text-base">Keluar dari Kuis?</h3>
+                <p class="text-xs text-slate-500 mt-1">Progres dan skor kuis saat ini akan hilang.</p>
             </div>
-            <div class="flex gap-2 pt-1">
-                <button onclick="hideCustomConfirm()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">
+            <div class="flex gap-2">
+                <button onclick="hideCustomConfirm()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition-all">
                     Batal
                 </button>
-                <button onclick="confirmExit()" class="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs transition-all shadow-sm">
+                <button onclick="confirmExit()" class="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-bold transition-all shadow-sm">
                     Ya, Keluar
                 </button>
             </div>
@@ -431,66 +446,67 @@
 
     <!-- JAVASCRIPT LOGIC -->
     <script>
-        /* --- GAME DATASET (LENGKAP 46 HURUF GOJUON) --- */
+        /* DATASET HIRAGANA 46 GOJUON */
         const HIRAGANA_DATA = [
             // Vokal (5)
-            { char: 'あ', romaji: 'a', meaning: 'Vokal "A"', hint: 'Pelafalan: seperti "a" dalam "aku"' },
-            { char: 'い', romaji: 'i', meaning: 'Vokal "I"', hint: 'Pelafalan: seperti "i" dalam "ibu"' },
-            { char: 'う', romaji: 'u', meaning: 'Vokal "U"', hint: 'Pelafalan: seperti "u" dalam "ular"' },
-            { char: 'え', romaji: 'e', meaning: 'Vokal "E"', hint: 'Pelafalan: seperti "e" dalam "enak"' },
-            { char: 'お', romaji: 'o', meaning: 'Vokal "O"', hint: 'Pelafalan: seperti "o" dalam "orang"' },
+            { char: 'あ', romaji: 'a', meaning: 'Hiragana A', hint: 'Pelafalan: vokal "a"' },
+            { char: 'い', romaji: 'i', meaning: 'Hiragana I', hint: 'Pelafalan: vokal "i"' },
+            { char: 'う', romaji: 'u', meaning: 'Hiragana U', hint: 'Pelafalan: vokal "u"' },
+            { char: 'え', romaji: 'e', meaning: 'Hiragana E', hint: 'Pelafalan: vokal "e"' },
+            { char: 'お', romaji: 'o', meaning: 'Hiragana O', hint: 'Pelafalan: vokal "o"' },
             // Baris K (5)
-            { char: 'か', romaji: 'ka', meaning: 'Baris K - KA', hint: 'Pelafalan: ka (k + a)' },
-            { char: 'き', romaji: 'ki', meaning: 'Baris K - KI', hint: 'Pelafalan: ki (k + i)' },
-            { char: 'く', romaji: 'ku', meaning: 'Baris K - KU', hint: 'Pelafalan: ku (k + u)' },
-            { char: 'け', romaji: 'ke', meaning: 'Baris K - KE', hint: 'Pelafalan: ke (k + e)' },
-            { char: 'こ', romaji: 'ko', meaning: 'Baris K - KO', hint: 'Pelafalan: ko (k + o)' },
+            { char: 'か', romaji: 'ka', meaning: 'Hiragana KA', hint: 'Pelafalan: suku kata ka' },
+            { char: 'き', romaji: 'ki', meaning: 'Hiragana KI', hint: 'Pelafalan: suku kata ki' },
+            { char: 'く', romaji: 'ku', meaning: 'Hiragana KU', hint: 'Pelafalan: suku kata ku' },
+            { char: 'け', romaji: 'ke', meaning: 'Hiragana KE', hint: 'Pelafalan: suku kata ke' },
+            { char: 'こ', romaji: 'ko', meaning: 'Hiragana KO', hint: 'Pelafalan: suku kata ko' },
             // Baris S (5)
-            { char: 'さ', romaji: 'sa', meaning: 'Baris S - SA', hint: 'Pelafalan: sa (s + a)' },
-            { char: 'し', romaji: 'shi', meaning: 'Baris S - SHI', hint: 'Pelafalan: shi (seperti "sy" dalam "syarat")' },
-            { char: 'す', romaji: 'su', meaning: 'Baris S - SU', hint: 'Pelafalan: su (s + u)' },
-            { char: 'せ', romaji: 'se', meaning: 'Baris S - SE', hint: 'Pelafalan: se (s + e)' },
-            { char: 'そ', romaji: 'so', meaning: 'Baris S - SO', hint: 'Pelafalan: so (s + o)' },
+            { char: 'さ', romaji: 'sa', meaning: 'Hiragana SA', hint: 'Pelafalan: suku kata sa' },
+            { char: 'し', romaji: 'shi', meaning: 'Hiragana SHI', hint: 'Pelafalan: shi (seperti "sy")' },
+            { char: 'す', romaji: 'su', meaning: 'Hiragana SU', hint: 'Pelafalan: suku kata su' },
+            { char: 'せ', romaji: 'se', meaning: 'Hiragana SE', hint: 'Pelafalan: suku kata se' },
+            { char: 'そ', romaji: 'so', meaning: 'Hiragana SO', hint: 'Pelafalan: suku kata so' },
             // Baris T (5)
-            { char: 'た', romaji: 'ta', meaning: 'Baris T - TA', hint: 'Pelafalan: ta (t + a)' },
-            { char: 'ち', romaji: 'chi', meaning: 'Baris T - CHI', hint: 'Pelafalan: chi (seperti "ch" atau "ci")' },
-            { char: 'つ', romaji: 'tsu', meaning: 'Baris T - TSU', hint: 'Pelafalan: tsu (bunyi t + su lembut)' },
-            { char: 'て', romaji: 'te', meaning: 'Baris T - TE', hint: 'Pelafalan: te (t + e)' },
-            { char: 'と', romaji: 'to', meaning: 'Baris T - TO', hint: 'Pelafalan: to (t + o)' },
+            { char: 'た', romaji: 'ta', meaning: 'Hiragana TA', hint: 'Pelafalan: suku kata ta' },
+            { char: 'ち', romaji: 'chi', meaning: 'Hiragana CHI', hint: 'Pelafalan: suku kata chi / ci' },
+            { char: 'つ', romaji: 'tsu', meaning: 'Hiragana TSU', hint: 'Pelafalan: suku kata tsu' },
+            { char: 'て', romaji: 'te', meaning: 'Hiragana TE', hint: 'Pelafalan: suku kata te' },
+            { char: 'と', romaji: 'to', meaning: 'Hiragana TO', hint: 'Pelafalan: suku kata to' },
             // Baris N (5)
-            { char: 'な', romaji: 'na', meaning: 'Baris N - NA', hint: 'Pelafalan: na (n + a)' },
-            { char: 'に', romaji: 'ni', meaning: 'Baris N - NI', hint: 'Pelafalan: ni (n + i)' },
-            { char: 'ぬ', romaji: 'nu', meaning: 'Baris N - NU', hint: 'Pelafalan: nu (n + u)' },
-            { char: 'ね', romaji: 'ne', meaning: 'Baris N - NE', hint: 'Pelafalan: ne (n + e)' },
-            { char: 'の', romaji: 'no', meaning: 'Baris N - NO', hint: 'Pelafalan: no (n + o)' },
+            { char: 'な', romaji: 'na', meaning: 'Hiragana NA', hint: 'Pelafalan: suku kata na' },
+            { char: 'に', romaji: 'ni', meaning: 'Hiragana NI', hint: 'Pelafalan: suku kata ni' },
+            { char: 'ぬ', romaji: 'nu', meaning: 'Hiragana NU', hint: 'Pelafalan: suku kata nu' },
+            { char: 'ね', romaji: 'ne', meaning: 'Hiragana NE', hint: 'Pelafalan: suku kata ne' },
+            { char: 'の', romaji: 'no', meaning: 'Hiragana NO', hint: 'Pelafalan: suku kata no' },
             // Baris H (5)
-            { char: 'は', romaji: 'ha', meaning: 'Baris H - HA', hint: 'Pelafalan: ha (h + a)' },
-            { char: 'ひ', romaji: 'hi', meaning: 'Baris H - HI', hint: 'Pelafalan: hi (h + i)' },
-            { char: 'ふ', romaji: 'fu', meaning: 'Baris H - FU', hint: 'Pelafalan: fu (seperti hembusan f/h)' },
-            { char: 'へ', romaji: 'he', meaning: 'Baris H - HE', hint: 'Pelafalan: he (h + e)' },
-            { char: 'ほ', romaji: 'ho', meaning: 'Baris H - HO', hint: 'Pelafalan: ho (h + o)' },
+            { char: 'は', romaji: 'ha', meaning: 'Hiragana HA', hint: 'Pelafalan: suku kata ha' },
+            { char: 'ひ', romaji: 'hi', meaning: 'Hiragana HI', hint: 'Pelafalan: suku kata hi' },
+            { char: 'ふ', romaji: 'fu', meaning: 'Hiragana FU', hint: 'Pelafalan: suku kata fu' },
+            { char: 'へ', romaji: 'he', meaning: 'Hiragana HE', hint: 'Pelafalan: suku kata he' },
+            { char: 'ほ', romaji: 'ho', meaning: 'Hiragana HO', hint: 'Pelafalan: suku kata ho' },
             // Baris M (5)
-            { char: 'ま', romaji: 'ma', meaning: 'Baris M - MA', hint: 'Pelafalan: ma (m + a)' },
-            { char: 'み', romaji: 'mi', meaning: 'Baris M - MI', hint: 'Pelafalan: mi (m + i)' },
-            { char: 'む', romaji: 'mu', meaning: 'Baris M - MU', hint: 'Pelafalan: mu (m + u)' },
-            { char: 'め', romaji: 'me', meaning: 'Baris M - ME', hint: 'Pelafalan: me (m + e)' },
-            { char: 'も', romaji: 'mo', meaning: 'Baris M - MO', hint: 'Pelafalan: mo (m + o)' },
+            { char: 'ま', romaji: 'ma', meaning: 'Hiragana MA', hint: 'Pelafalan: suku kata ma' },
+            { char: 'み', romaji: 'mi', meaning: 'Hiragana MI', hint: 'Pelafalan: suku kata mi' },
+            { char: 'む', romaji: 'mu', meaning: 'Hiragana MU', hint: 'Pelafalan: suku kata mu' },
+            { char: 'め', romaji: 'me', meaning: 'Hiragana ME', hint: 'Pelafalan: suku kata me' },
+            { char: 'も', romaji: 'mo', meaning: 'Hiragana MO', hint: 'Pelafalan: suku kata mo' },
             // Baris Y (3)
-            { char: 'や', romaji: 'ya', meaning: 'Baris Y - YA', hint: 'Pelafalan: ya (y + a)' },
-            { char: 'ゆ', romaji: 'yu', meaning: 'Baris Y - YU', hint: 'Pelafalan: yu (y + u)' },
-            { char: 'よ', romaji: 'yo', meaning: 'Baris Y - YO', hint: 'Pelafalan: yo (y + o)' },
+            { char: 'や', romaji: 'ya', meaning: 'Hiragana YA', hint: 'Pelafalan: suku kata ya' },
+            { char: 'ゆ', romaji: 'yu', meaning: 'Hiragana YU', hint: 'Pelafalan: suku kata yu' },
+            { char: 'よ', romaji: 'yo', meaning: 'Hiragana YO', hint: 'Pelafalan: suku kata yo' },
             // Baris R (5)
-            { char: 'ら', romaji: 'ra', meaning: 'Baris R - RA', hint: 'Pelafalan: ra (r lembut seperti l/r)' },
-            { char: 'り', romaji: 'ri', meaning: 'Baris R - RI', hint: 'Pelafalan: ri (r + i)' },
-            { char: 'る', romaji: 'ru', meaning: 'Baris R - RU', hint: 'Pelafalan: ru (r + u)' },
-            { char: 'れ', romaji: 're', meaning: 'Baris R - RE', hint: 'Pelafalan: re (r + e)' },
-            { char: 'ろ', romaji: 'ro', meaning: 'Baris R - RO', hint: 'Pelafalan: ro (r + o)' },
+            { char: 'ら', romaji: 'ra', meaning: 'Hiragana RA', hint: 'Pelafalan: suku kata ra' },
+            { char: 'り', romaji: 'ri', meaning: 'Hiragana RI', hint: 'Pelafalan: suku kata ri' },
+            { char: 'る', romaji: 'ru', meaning: 'Hiragana RU', hint: 'Pelafalan: suku kata ru' },
+            { char: 'れ', romaji: 're', meaning: 'Hiragana RE', hint: 'Pelafalan: suku kata re' },
+            { char: 'ろ', romaji: 'ro', meaning: 'Hiragana RO', hint: 'Pelafalan: suku kata ro' },
             // Baris W & N (3)
-            { char: 'わ', romaji: 'wa', meaning: 'Baris W - WA', hint: 'Pelafalan: wa (w + a)' },
-            { char: 'を', romaji: 'wo', meaning: 'Baris W - WO/O', hint: 'Pelafalan: o/wo (partikel)' },
-            { char: 'ん', romaji: 'n', meaning: 'Konsonan N Single', hint: 'Pelafalan: n (bunyi sengau di akhir)' }
+            { char: 'わ', romaji: 'wa', meaning: 'Hiragana WA', hint: 'Pelafalan: suku kata wa' },
+            { char: 'を', romaji: 'wo', meaning: 'Hiragana WO/O', hint: 'Pelafalan: suku kata wo' },
+            { char: 'ん', romaji: 'n', meaning: 'Hiragana N Single', hint: 'Pelafalan: konsonan n' }
         ];
 
+        /* DATASET KATAKANA 46 GOJUON */
         const KATAKANA_DATA = [
             // Vokal (5)
             { char: 'ア', romaji: 'a', meaning: 'Katakana A', hint: 'Pelafalan: vokal "a"' },
@@ -546,87 +562,358 @@
             { char: 'ロ', romaji: 'ro', meaning: 'Katakana RO', hint: 'Pelafalan: suku kata ro' },
             // Baris W & N (3)
             { char: 'ワ', romaji: 'wa', meaning: 'Katakana WA', hint: 'Pelafalan: suku kata wa' },
-            { char: 'ヲ', romaji: 'wo', meaning: 'Katakana WO', hint: 'Pelafalan: suku kata wo/o' },
-            { char: 'ン', romaji: 'n', meaning: 'Katakana N', hint: 'Pelafalan: konsonan n' }
+            { char: 'ヲ', romaji: 'wo', meaning: 'Katakana WO/O', hint: 'Pelafalan: suku kata wo' },
+            { char: 'ン', romaji: 'n', meaning: 'Katakana N Single', hint: 'Pelafalan: konsonan n' }
         ];
 
+        /* DATASET GABUNGAN HURUF (150 KATA) */
+        const IQRO_DATA = [
+            { char: 'あい', romaji: 'a-i', meaning: 'Cinta / Kasih Sayang', hint: 'Gabungan: あ + い' },
+            { char: 'かい', romaji: 'ka-i', meaning: 'Kerang', hint: 'Gabungan: か + い' },
+            { char: 'あき', romaji: 'a-ki', meaning: 'Musim Gugur', hint: 'Gabungan: あ + き' },
+            { char: 'しか', romaji: 'shi-ka', meaning: 'Rusa', hint: 'Gabungan: し + か' },
+            { char: 'いけ', romaji: 'i-ke', meaning: 'Kolam', hint: 'Gabungan: い + け' },
+            { char: 'ねこ', romaji: 'ne-ko', meaning: 'Kucing', hint: 'Gabungan: ね + こ' },
+            { char: 'いぬ', romaji: 'i-nu', meaning: 'Anjing', hint: 'Gabungan: い + ぬ' },
+            { char: 'とり', romaji: 'to-ri', meaning: 'Burung', hint: 'Gabungan: と + り' },
+            { char: 'やま', romaji: 'ya-ma', meaning: 'Gunung', hint: 'Gabungan: や + ま' },
+            { char: 'かわ', romaji: 'ka-wa', meaning: 'Sungai', hint: 'Gabungan: か + わ' },
+            { char: 'あさ', romaji: 'a-sa', meaning: 'Pagi', hint: 'Gabungan: あ + さ' },
+            { char: 'ひる', romaji: 'hi-ru', meaning: 'Siang', hint: 'Gabungan: ひ + る' },
+            { char: 'よる', romaji: 'yo-ru', meaning: 'Malam', hint: 'Gabungan: よ + る' },
+            { char: 'そら', romaji: 'so-ra', meaning: 'Langit', hint: 'Gabungan: そ + ら' },
+            { char: 'うみ', romaji: 'u-mi', meaning: 'Laut', hint: 'Gabungan: う + み' },
+            { char: 'はな', romaji: 'ha-na', meaning: 'Bunga', hint: 'Gabungan: は + な' },
+            { char: 'むし', romaji: 'mu-shi', meaning: 'Serangga', hint: 'Gabungan: む + し' },
+            { char: 'くmo', romaji: 'ku-mo', meaning: 'Awan', hint: 'Gabungan: く + も' },
+            { char: 'ほし', romaji: 'ho-shi', meaning: 'Bintang', hint: 'Gabungan: ほ + し' },
+            { char: 'ゆき', romaji: 'yu-ki', meaning: 'Salju', hint: 'Gabungan: ゆ + き' },
+            { char: 'あめ', romaji: 'a-me', meaning: 'Hujan / Permen', hint: 'Gabungan: あ + め' },
+            { char: 'かぜ', romaji: 'ka-ze', meaning: 'Angin', hint: 'Gabungan: か + ぜ' },
+            { char: 'くつ', romaji: 'ku-tsu', meaning: 'Sepatu', hint: 'Gabungan: く + つ' },
+            { char: 'かさ', romaji: 'ka-sa', meaning: 'Payung', hint: 'Gabungan: か + さ' },
+            { char: 'はこ', romaji: 'ha-ko', meaning: 'Kotak', hint: 'Gabungan: は + こ' },
+            { char: 'かみ', romaji: 'ka-mi', meaning: 'Kertas / Rambut', hint: 'Gabungan: か + み' },
+            { char: 'ふね', romaji: 'fu-ne', meaning: 'Kapal Laut', hint: 'Gabungan: ふ + ね' },
+            { char: 'みち', romaji: 'mi-chi', meaning: 'Jalanan', hint: 'Gabungan: み + ち' },
+            { char: 'まち', romaji: 'ma-chi', meaning: 'Kota', hint: 'Gabungan: ま + ち' },
+            { char: 'むら', romaji: 'mu-ra', meaning: 'Desa', hint: 'Gabungan: む + ら' },
+            { char: 'みみ', romaji: 'mi-mi', meaning: 'Telinga', hint: 'Gabungan: み + み' },
+            { char: 'くち', romaji: 'ku-chi', meaning: 'Mulut', hint: 'Gabungan: く + ち' },
+            { char: 'かお', romaji: 'ka-o', meaning: 'Wajah', hint: 'Gabungan: か + お' },
+            { char: 'あし', romaji: 'a-shi', meaning: 'Kaki', hint: 'Gabungan: あ + し' },
+            { char: 'くび', romaji: 'ku-bi', meaning: 'Leher', hint: 'Gabungan: く + び' },
+            { char: 'ゆび', romaji: 'yu-bi', meaning: 'Jari', hint: 'Gabungan: ゆ + び' },
+            { char: 'ほね', romaji: 'ho-ne', meaning: 'Tulang', hint: 'Gabungan: ほ + ね' },
+            { char: 'にく', romaji: 'ni-ku', meaning: 'Daging', hint: 'Gabungan: に + く' },
+            { char: 'つき', romaji: 'tsu-ki', meaning: 'Bulan', hint: 'Gabungan: つ + き' },
+            { char: 'みず', romaji: 'mi-zu', meaning: 'Air', hint: 'Gabungan: み + ず' },
+            { char: 'つち', romaji: 'tsu-chi', meaning: 'Tanah', hint: 'Gabungan: つ + ち' },
+            { char: 'いし', romaji: 'i-shi', meaning: 'Batu', hint: 'Gabungan: い + し' },
+            { char: 'くさ', romaji: 'ku-sa', meaning: 'Rumput', hint: 'Gabungan: く + さ' },
+            { char: 'えだ', romaji: 'e-da', meaning: 'Ranting', hint: 'Gabungan: え + だ' },
+            { char: 'たね', romaji: 'ta-ne', meaning: 'Biji', hint: 'Gabungan: た + ね' },
+            { char: 'かげ', romaji: 'ka-ge', meaning: 'Bayangan', hint: 'Gabungan: か + げ' },
+            { char: 'おと', romaji: 'o-to', meaning: 'Suara / Bunyi', hint: 'Gabungan: お + と' },
+            { char: 'こえ', romaji: 'ko-e', meaning: 'Suara Manusia', hint: 'Gabungan: こ + え' },
+            { char: 'いい', romaji: 'i-i', meaning: 'Bagus / Baik', hint: 'Gabungan: い + い' },
+            { char: 'あか', romaji: 'a-ka', meaning: 'Merah', hint: 'Gabungan: あ + か' },
+            { char: 'あお', romaji: 'a-o', meaning: 'Biru', hint: 'Gabungan: あ + お' },
+            { char: 'しろ', romaji: 'shi-ro', meaning: 'Putih', hint: 'Gabungan: し + ろ' },
+            { char: 'くろ', romaji: 'ku-ro', meaning: 'Hitam', hint: 'Gabungan: く + ろ' },
+            { char: 'きいろ', romaji: 'ki-i-ro', meaning: 'Kuning', hint: 'Gabungan: き + い + ろ' },
+            { char: 'みどり', romaji: 'mi-do-ri', meaning: 'Hijau', hint: 'Gabungan: み + ど + り' },
+            { char: 'むらさき', romaji: 'mu-ra-sa-ki', meaning: 'Ungu', hint: 'Gabungan: む + ら + さ + き' },
+            { char: 'ひかり', romaji: 'hi-ka-ri', meaning: 'Cahaya', hint: 'Gabungan: ひ + か + り' },
+            { char: 'こころ', romaji: 'ko-ko-ro', meaning: 'Hati / Jiwa', hint: 'Gabungan: こ + こ + ろ' },
+            { char: 'さくら', romaji: 'sa-ku-ra', meaning: 'Bunga Sakura', hint: 'Gabungan: さ + く + ら' },
+            { char: 'かがみ', romaji: 'ka-ga-mi', meaning: 'Cermin', hint: 'Gabungan: か + が + み' },
+            { char: 'くるま', romaji: 'ku-ru-ma', meaning: 'Mobil', hint: 'Gabungan: く + る + ま' },
+            { char: 'さかな', romaji: 'sa-ka-na', meaning: 'Ikan', hint: 'Gabungan: さ + か + な' },
+            { char: 'てんき', romaji: 'te-n-ki', meaning: 'Cuaca', hint: 'Gabungan: て + ん + き' },
+            { char: 'でんわ', romaji: 'de-n-wa', meaning: 'Telepon', hint: 'Gabungan: で + ん + わ' },
+            { char: 'とけい', romaji: 'to-ke-i', meaning: 'Jam', hint: 'Gabungan: と + け + い' },
+            { char: 'へや', romaji: 'he-ya', meaning: 'Kamar', hint: 'Gabungan: へ + や' },
+            { char: 'あたま', romaji: 'a-ta-ma', meaning: 'Kepala', hint: 'Gabungan: あ + た + ま' },
+            { char: 'おなか', romaji: 'o-na-ka', meaning: 'Perut', hint: 'Gabungan: お + な + か' },
+            { char: 'せなか', romaji: 'se-na-ka', meaning: 'Punggung', hint: 'Gabungan: せ + な + か' },
+            { char: 'からだ', romaji: 'ka-ra-da', meaning: 'Tubuh', hint: 'Gabungan: か + ら + だ' },
+            { char: 'こども', romaji: 'ko-do-mo', meaning: 'Anak-anak', hint: 'Gabungan: こ + ど + も' },
+            { char: 'おとこ', romaji: 'o-to-ko', meaning: 'Laki-laki', hint: 'Gabungan: お + と + こ' },
+            { char: 'おんな', romaji: 'o-n-na', meaning: 'Perempuan', hint: 'Gabungan: お + ん + な' },
+            { char: 'ともだち', romaji: 'to-mo-da-chi', meaning: 'Teman', hint: 'Gabungan: と + も + だ + ち' },
+            { char: 'かぞく', romaji: 'ka-zo-ku', meaning: 'Keluarga', hint: 'Gabungan: か + ぞ + く' },
+            { char: 'せんせい', romaji: 'se-n-se-i', meaning: 'Guru', hint: 'Gabungan: せ + ん + せ + い' },
+            { char: 'がくせい', romaji: 'ga-ku-se-i', meaning: 'Murid', hint: 'Gabungan: が + く + せ + い' },
+            { char: 'がっこう', romaji: 'ga-k-ko-u', meaning: 'Sekolah', hint: 'Gabungan: が + っ + こ + う' },
+            { char: 'きょうしつ', romaji: 'kyo-u-shi-tsu', meaning: 'Ruang Kelas', hint: 'Gabungan: きょう + し + つ' },
+            { char: 'つくえ', romaji: 'tsu-ku-e', meaning: 'Meja Belajar', hint: 'Gabungan: つ + く + え' },
+            { char: 'えんぴつ', romaji: 'e-n-pi-tsu', meaning: 'Pensil', hint: 'Gabungan: え + ん + ぴ + つ' },
+            { char: 'かばん', romaji: 'ka-ba-n', meaning: 'Tas', hint: 'Gabungan: か + ば + ん' },
+            { char: 'おかね', romaji: 'o-ka-ne', meaning: 'Uang', hint: 'Gabungan: お + か + ね' },
+            { char: 'さいふ', romaji: 'sa-i-fu', meaning: 'Dompet', hint: 'Gabungan: さ + い + ふ' },
+            { char: 'めがね', romaji: 'me-ga-ne', meaning: 'Kacamata', hint: 'Gabungan: め + が + ね' },
+            { char: 'ふく', romaji: 'fu-ku', meaning: 'Baju', hint: 'Gabungan: ふ + く' },
+            { char: 'ズボン', romaji: 'zu-bo-n', meaning: 'Celana', hint: 'Gabungan: ズ + ボ + ン' },
+            { char: 'ぼうし', romaji: 'bo-u-shi', meaning: 'Topi', hint: 'Gabungan: ぼ + う + し' },
+            { char: 'たべもの', romaji: 'ta-be-mo-no', meaning: 'Makanan', hint: 'Gabungan: た + べ + も + の' },
+            { char: 'のみもの', romaji: 'no-mi-mo-no', meaning: 'Minuman', hint: 'Gabungan: の + み + も + の' },
+            { char: 'くだもの', romaji: 'ku-da-mo-no', meaning: 'Buah-buahan', hint: 'Gabungan: く + だ + も + の' },
+            { char: 'たまご', romaji: 'ta-ma-go', meaning: 'Telur', hint: 'Gabungan: た + ま + ご' },
+            { char: 'さとう', romaji: 'sa-to-u', meaning: 'Gula', hint: 'Gabungan: さ + と + う' },
+            { char: 'しょうゆ', romaji: 'sho-u-yu', meaning: 'Kecap Asin', hint: 'Gabungan: しょう + ゆ' },
+            { char: 'みそ', romaji: 'mi-so', meaning: 'Miso', hint: 'Gabungan: み + そ' },
+            { char: 'あさごはん', romaji: 'a-sa-go-ha-n', meaning: 'Makan Pagi', hint: 'Gabungan: あ + さ + ご + は + ん' },
+            { char: 'ひるごはん', romaji: 'hi-ru-go-ha-n', meaning: 'Makan Siang', hint: 'Gabungan: ひ + る + ご + は + ん' },
+            { char: 'ばんごはん', romaji: 'ba-n-go-ha-n', meaning: 'Makan Malam', hint: 'Gabungan: ば + ん + ご + は + ん' },
+            { char: 'あした', romaji: 'a-shi-ta', meaning: 'Besok', hint: 'Gabungan: あ + し + た' },
+            { char: 'きのう', romaji: 'ki-no-u', meaning: 'Kemarin', hint: 'Gabungan: き + の + う' },
+            { char: 'あさって', romaji: 'a-sa-t-te', meaning: 'Lusa', hint: 'Gabungan: あ + さ + っ + て' },
+            { char: 'まいにち', romaji: 'ma-i-ni-chi', meaning: 'Setiap Hari', hint: 'Gabungan: ま + い + に + ち' },
+            { char: 'こんしゅう', romaji: 'ko-n-shu-u', meaning: 'Minggu Ini', hint: 'Gabungan: こ + ん + しゅう' },
+            { char: 'らいしゅう', romaji: 'ra-i-shu-u', meaning: 'Minggu Depan', hint: 'Gabungan: ら + い + しゅう' },
+            { char: 'カニ', romaji: 'ka-ni', meaning: 'Kepiting', hint: 'Gabungan: カ + ニ' },
+            { char: 'イヌ', romaji: 'i-nu', meaning: 'Anjing', hint: 'Gabungan: イ + ヌ' },
+            { char: 'サル', romaji: 'sa-ru', meaning: 'Monyet', hint: 'Gabungan: サ + ル' },
+            { char: 'ウシ', romaji: 'u-shi', meaning: 'Sapi', hint: 'Gabungan: ウ + シ' },
+            { char: 'クマ', romaji: 'ku-ma', meaning: 'Beruang', hint: 'Gabungan: ク + マ' },
+            { char: 'トラ', romaji: 'to-ra', meaning: 'Harimau', hint: 'Gabungan: ト + ラ' },
+            { char: 'シカ', romaji: 'shi-ka', meaning: 'Rusa', hint: 'Gabungan: シ + カ' },
+            { char: 'ペン', romaji: 'pe-n', meaning: 'Pena', hint: 'Gabungan: ペ + ン' },
+            { char: 'バス', romaji: 'ba-su', meaning: 'Bus', hint: 'Gabungan: バ + ス' },
+            { char: 'ドア', romaji: 'do-a', meaning: 'Pintu', hint: 'Gabungan: ド + ア' },
+            { char: 'ビル', romaji: 'bi-ru', meaning: 'Gedung', hint: 'Gabungan: ビ + ル' },
+            { char: 'パン', romaji: 'pa-n', meaning: 'Roti', hint: 'Gabungan: パ + ン' },
+            { char: 'メモ', romaji: 'me-mo', meaning: 'Catatan', hint: 'Gabungan: メ + モ' },
+            { char: 'カメラ', romaji: 'ka-me-ra', meaning: 'Kamera', hint: 'Gabungan: カ + メ + ラ' },
+            { char: 'バナナ', romaji: 'ba-na-na', meaning: 'Pisang', hint: 'Gabungan: バ + ナ + ナ' },
+            { char: 'タクシー', romaji: 'ta-ku-shi-', meaning: 'Taksi', hint: 'Gabungan: タ + ク + シ + ー' },
+            { char: 'ラジオ', romaji: 'ra-ji-o', meaning: 'Radio', hint: 'Gabungan: ラ + ジ + オ' },
+            { char: 'テレビ', romaji: 'te-re-bi', meaning: 'Televisi', hint: 'Gabungan: テ + レ + ビ' },
+            { char: 'ホテル', romaji: 'ho-te-ru', meaning: 'Hotel', hint: 'Gabungan: ホ + テ + ル' },
+            { char: 'トレイ', romaji: 'to-re-i', meaning: 'Nampan', hint: 'Gabungan: ト + レ + イ' },
+            { char: 'ノート', romaji: 'no-ー-to', meaning: 'Buku Catatan', hint: 'Gabungan: ノ + ー + ト' },
+            { char: 'カード', romaji: 'ka-ー-do', meaning: 'Kartu', hint: 'Gabungan: カ + ー + ド' },
+            { char: 'コイン', romaji: 'ko-i-n', meaning: 'Koin', hint: 'Gabungan: コ + イ + ン' },
+            { char: 'インク', romaji: 'i-n-ku', meaning: 'Tinta', hint: 'Gabungan: イ + ン + ク' },
+            { char: 'ベッド', romaji: 'be-d-do', meaning: 'Kasur', hint: 'Gabungan: ベ + ッ + ド' },
+            { char: 'シーツ', romaji: 'shi-ー-tsu', meaning: 'Sprei', hint: 'Gabungan: シ + ー + ツ' },
+            { char: 'ソファ', romaji: 'so-fa', meaning: 'Sofa', hint: 'Gabungan: ソ + ファ' },
+            { char: 'ランプ', romaji: 'ra-n-pu', meaning: 'Lampu', hint: 'Gabungan: ラ + ン + プ' },
+            { char: 'カップ', romaji: 'ka-p-pu', meaning: 'Cangkir', hint: 'Gabungan: カ + ッ + プ' },
+            { char: 'グラス', romaji: 'gu-ra-su', meaning: 'Gelas Kaca', hint: 'Gabungan: グ + ラ + ス' },
+            { char: 'ナイフ', romaji: 'na-i-fu', meaning: 'Pisau', hint: 'Gabungan: ナ + イ + フ' },
+            { char: 'フォーク', romaji: 'fo-ー-ku', meaning: 'Garpu', hint: 'Gabungan: フォ + ー + ク' },
+            { char: 'スプーン', romaji: 'su-pu-ー-n', meaning: 'Sendok', hint: 'Gabungan: ス + プ + ー + ン' },
+            { char: 'ボウル', romaji: 'bo-u-ru', meaning: 'Mangkuk', hint: 'Gabungan: ボ + ウ + ル' },
+            { char: 'ケーキ', romaji: 'ke-ー-ki', meaning: 'Kue', hint: 'Gabungan: ケ + ー + キ' },
+            { char: 'バター', romaji: 'ba-ta-ー', meaning: 'Mentega', hint: 'Gabungan: バ + タ + ー' },
+            { char: 'チーズ', romaji: 'chi-ー-zu', meaning: 'Keju', hint: 'Gabungan: チ + ー + ズ' },
+            { char: 'ミルク', romaji: 'mi-ru-ku', meaning: 'Susu', hint: 'Gabungan: ミ + ル + ク' },
+            { char: 'ジュース', romaji: 'ju-ー-su', meaning: 'Jus', hint: 'Gabungan: ジュ + ー + ス' },
+            { char: 'コーラ', romaji: 'ko-ー-ra', meaning: 'Kola', hint: 'Gabungan: コ + ー + ラ' },
+            { char: 'ビール', romaji: 'bi-ー-ru', meaning: 'Bir', hint: 'Gabungan: ビ + ー + ル' },
+            { char: 'ワイン', romaji: 'wa-i-n', meaning: 'Anggur', hint: 'Gabungan: ワ + イ + ン' },
+            { char: 'スープ', romaji: 'su-ー-pu', meaning: 'Sup', hint: 'Gabungan: ス + ー + プ' },
+            { char: 'サラダ', romaji: 'sa-ra-da', meaning: 'Salad', hint: 'Gabungan: サ + ラ + ダ' },
+            { char: 'トマト', romaji: 'to-ma-to', meaning: 'Tomat', hint: 'Gabungan: ト + マ + ト' },
+            { char: 'ポテト', romaji: 'po-te-to', meaning: 'Kentang', hint: 'Gabungan: ポ + テ + ト' },
+            { char: 'カレー', romaji: 'ka-re-ー', meaning: 'Kari', hint: 'Gabungan: カ + レ + ー' },
+            { char: 'ラーメン', romaji: 'ra-ー-me-n', meaning: 'Ramen', hint: 'Gabungan: ラ + ー + メ + ン' },
+            { char: 'パスタ', romaji: 'pa-su-ta', meaning: 'Pasta', hint: 'Gabungan: パ + ス + タ' },
+            { char: 'ピザ', romaji: 'pi-za', meaning: 'Pizza', hint: 'Gabungan: ピ + ザ' },
+            { char: 'アイス', romaji: 'a-i-su', meaning: 'Es Krim', hint: 'Gabungan: ア + イ + ス' },
+            { char: 'チョコ', romaji: 'cho-ko', meaning: 'Cokelat', hint: 'Gabungan: チ + ョ + コ' },
+            { char: 'キャンディ', romaji: 'kya-n-di', meaning: 'Permen', hint: 'Gabungan: キャ + ン + ディ' },
+            { char: 'ガム', romaji: 'ga-mu', meaning: 'Permen Karet', hint: 'Gabungan: ガ + ム' },
+            { char: 'タバコ', romaji: 'ta-ba-ko', meaning: 'Rokok', hint: 'Gabungan: タ + バ + コ' },
+            { char: 'マッチ', romaji: 'ma-c-chi', meaning: 'Korek Api', hint: 'Gabungan: マ + ッ + チ' },
+            { char: 'レジ', romaji: 're-ji', meaning: 'Kasir', hint: 'Gabungan: レ + ジ' },
+            { char: 'レシート', romaji: 're-shi-ー-to', meaning: 'Struk Belanja', hint: 'Gabungan: レ + シ + ー + ト' },
+            { char: 'バッグ', romaji: 'ba-g-gu', meaning: 'Tas', hint: 'Gabungan: バ + ッ + グ' },
+            { char: 'スーツ', romaji: 'su-ー-tsu', meaning: 'Setelan Jas', hint: 'Gabungan: ス + ー + ツ' },
+            { char: 'シャツ', romaji: 'sha-tsu', meaning: 'Kemeja', hint: 'Gabungan: シ + ャ + ツ' },
+            { char: 'ネクタイ', romaji: 'ne-ku-ta-i', meaning: 'Dasi', hint: 'Gabungan: ネ + ク + タ + イ' },
+            { char: 'ベルト', romaji: 'be-ru-to', meaning: 'Ikat Pinggang', hint: 'Gabungan: ベ + ル + ト' },
+            { char: 'リング', romaji: 'ri-n-gu', meaning: 'Cincin', hint: 'Gabungan: リ + ン + グ' },
+            { char: 'ピアス', romaji: 'pi-a-su', meaning: 'Anting', hint: 'Gabungan: ピ + ア + ス' },
+            { char: 'メガネ', romaji: 'me-ga-ne', meaning: 'Kacamata', hint: 'Gabungan: メ + ガ + ネ' },
+            { char: 'マスク', romaji: 'ma-su-ku', meaning: 'Masker', hint: 'Gabungan: マ + ス + ク' },
+            { char: 'タオル', romaji: 'ta-o-ru', meaning: 'Handuk', hint: 'Gabungan: タ + オ + ル' },
+            { char: 'ブラシ', romaji: 'bu-ra-shi', meaning: 'Sikat', hint: 'Gabungan: ブ + ラ + シ' },
+            { char: 'シャンプー', romaji: 'sha-n-pu-ー', meaning: 'Sampo', hint: 'Gabungan: シャ + ン + プ + ー' },
+            { char: 'リンス', romaji: 'ri-n-su', meaning: 'Kondisioner', hint: 'Gabungan: リ + ン + ス' },
+            { char: 'ソープ', romaji: 'so-ー-pu', meaning: 'Sabun Batang', hint: 'Gabungan: ソ + ー + プ' },
+            { char: 'ティッシュ', romaji: 'ti-s-shu', meaning: 'Tisu', hint: 'Gabungan: ティ + ッ + シュ' },
+            { char: 'トイレ', romaji: 'to-i-re', meaning: 'Toilet', hint: 'Gabungan: ト + イ + レ' },
+            { char: 'シャワー', romaji: 'sha-wa-ー', meaning: 'Shower', hint: 'Gabungan: シャ + ワ + ー' },
+            { char: 'キー', romaji: 'ki-ー', meaning: 'Kunci', hint: 'Gabungan: キ + ー' },
+            { char: 'ロック', romaji: 'ro-c-ku', meaning: 'Kunci Gembok', hint: 'Gabungan: ロ + ッ + ク' },
+            { char: 'ベル', romaji: 'be-ru', meaning: 'Bel', hint: 'Gabungan: ベ + ル' },
+            { char: 'ポスト', romaji: 'po-su-to', meaning: 'Kotak Pos', hint: 'Gabungan: ポ + ス + ト' },
+            { char: 'スタンプ', romaji: 'su-ta-n-pu', meaning: 'Stempel', hint: 'Gabungan: ス + タ + ン + プ' },
+            { char: 'シール', romaji: 'shi-ー-ru', meaning: 'Stiker', hint: 'Gabungan: シ + ー + ル' },
+            { char: 'テープ', romaji: 'te-ー-pu', meaning: 'Isolasi', hint: 'Gabungan: テ + ー + プ' },
+            { char: 'ピン', romaji: 'pi-n', meaning: 'Pin / Jarum', hint: 'Gabungan: ピ + ン' }
+        ];
+
+        /* DATASET VOCABULARY (150 KATA) */
         const VOCAB_DATA = [
-            // Salam & Ungkapan Sehari-hari
-            { char: 'こんにちは', romaji: 'Konnichiwa', meaning: 'Halo / Selamat Siang', hint: 'Dibaca: kon-ni-chi-wa' },
-            { char: 'ありがとう', romaji: 'Arigatou', meaning: 'Terima Kasih', hint: 'Dibaca: a-ri-ga-to-u' },
-            { char: 'さようなら', romaji: 'Sayounara', meaning: 'Selamat Tinggal', hint: 'Dibaca: sa-yo-u-na-ra' },
-            { char: 'おはよう', romaji: 'Ohayou', meaning: 'Selamat Pagi', hint: 'Dibaca: o-ha-yo-u' },
-            { char: 'こんばんは', romaji: 'Konbanwa', meaning: 'Selamat Malam', hint: 'Dibaca: kon-ba-n-wa' },
-            { char: 'すみません', romaji: 'Sumimasen', meaning: 'Permisi / Maaf', hint: 'Dibaca: su-mi-ma-se-n' },
-            { char: 'はい', romaji: 'Hai', meaning: 'Ya', hint: 'Dibaca: ha-i' },
-            { char: 'いいえ', romaji: 'Iie', meaning: 'Tidak', hint: 'Dibaca: i-i-e' },
-            { char: 'おねがいします', romaji: 'Onegaishimasu', meaning: 'Minta Tolong / Silakan', hint: 'Dibaca: o-ne-ga-i-shi-ma-su' },
-            { char: 'ごめんなさい', romaji: 'Gomennasai', meaning: 'Mohon Maaf', hint: 'Dibaca: go-me-n-na-sa-i' },
-            
-            // Hewan & Alam
-            { char: 'ねこ', romaji: 'Neko', meaning: 'Kucing', hint: 'Dibaca: ne-ko' },
-            { char: 'いぬ', romaji: 'Inu', meaning: 'Anjing', hint: 'Dibaca: i-nu' },
-            { char: 'とり', romaji: 'Tori', meaning: 'Burung', hint: 'Dibaca: to-ri' },
-            { char: 'さかな', romaji: 'Sakana', meaning: 'Ikan', hint: 'Dibaca: sa-ka-na' },
-            { char: 'やま', romaji: 'Yama', meaning: 'Gunung', hint: 'Dibaca: ya-ma' },
-            { char: '川 (かわ)', romaji: 'Kawa', meaning: 'Sungai', hint: 'Dibaca: ka-wa' },
-            { char: '空 (そら)', romaji: 'Sora', meaning: 'Langit', hint: 'Dibaca: so-ra' },
-            { char: '雨 (あめ)', romaji: 'Ame', meaning: 'Hujan', hint: 'Dibaca: a-me' },
-            { char: '花 (はな)', romaji: 'Hana', meaning: 'Bunga', hint: 'Dibaca: ha-na' },
-            
-            // Makanan & Minuman
-            { char: 'みず', romaji: 'Mizu', meaning: 'Air', hint: 'Dibaca: mi-zu' },
-            { char: 'たべもの', romaji: 'Tabemono', meaning: 'Makanan', hint: 'Dibaca: ta-be-mo-no' },
-            { char: '飲みもの (のみもの)', romaji: 'Nomimono', meaning: 'Minuman', hint: 'Dibaca: no-mi-mo-no' },
-            { char: 'お茶 (おちゃ)', romaji: 'Ocha', meaning: 'Teh Hijau', hint: 'Dibaca: o-cha' },
-            { char: 'ご飯 (ごはん)', romaji: 'Gohan', meaning: 'Nasi / Makan', hint: 'Dibaca: go-ha-n' },
-            { char: '肉 (にく)', romaji: 'Niku', meaning: 'Daging', hint: 'Dibaca: ni-ku' },
-            { char: '野菜 (やさい)', romaji: 'Yasai', meaning: 'Sayuran', hint: 'Dibaca: ya-sa-i' },
-            { char: '果物 (くだもの)', romaji: 'Kudamono', meaning: 'Buah-buahan', hint: 'Dibaca: ku-da-mo-no' },
-
-            // Manusia & Hubungan
-            { char: 'ともだち', romaji: 'Tomodachi', meaning: 'Teman', hint: 'Dibaca: to-mo-da-chi' },
-            { char: 'せんせい', romaji: 'Sensei', meaning: 'Guru', hint: 'Dibaca: se-n-se-i' },
-            { char: 'がくせい', romaji: 'Gakusei', meaning: 'Siswa / Murid', hint: 'Dibaca: ga-ku-se-i' },
-            { char: '人 (ひと)', romaji: 'Hito', meaning: 'Orang', hint: 'Dibaca: hi-to' },
-            { char: '家族 (かぞく)', romaji: 'Kazoku', meaning: 'Keluarga', hint: 'Dibaca: ka-zo-ku' },
-            { char: '父 (ちち)', romaji: 'Chichi', meaning: 'Ayah (Sendiri)', hint: 'Dibaca: chi-chi' },
-            { char: '母 (はは)', romaji: 'Haha', meaning: 'Ibu (Sendiri)', hint: 'Dibaca: ha-ha' },
-
-            // Benda Sehari-hari & Tempat
-            { char: '本 (ほん)', romaji: 'Hon', meaning: 'Buku', hint: 'Dibaca: ho-n' },
-            { char: '車 (くるま)', romaji: 'Kuruma', meaning: 'Mobil', hint: 'Dibaca: ku-ru-ma' },
-            { char: '家 (いえ)', romaji: 'Ie', meaning: 'Rumah', hint: 'Dibaca: i-e' },
-            { char: '学校 (がっこう)', romaji: 'Gakkou', meaning: 'Sekolah', hint: 'Dibaca: gak-ko-u' },
-            { char: '部屋 (へや)', romaji: 'Heya', meaning: 'Kamar / Ruangan', hint: 'Dibaca: he-ya' },
-            { char: 'お金 (おかね)', romaji: 'Okane', meaning: 'Uang', hint: 'Dibaca: o-ka-ne' },
-            { char: '時計 (とけい)', romaji: 'Tokei', meaning: 'Jam', hint: 'Dibaca: to-ke-i' },
-            { char: '電話 (でんわ)', romaji: 'Denwa', meaning: 'Telepon', hint: 'Dibaca: de-n-wa' },
-
-            // Kata Sifat Dasar
-            { char: '大きい (おおきい)', romaji: 'Ookii', meaning: 'Besar', hint: 'Dibaca: o-o-ki-i' },
-            { char: '小さい (ちいさい)', romaji: 'Chiisai', meaning: 'Kecil', hint: 'Dibaca: chi-i-sa-i' },
-            { char: 'いい / 良い (よい)', romaji: 'Ii / Yoi', meaning: 'Bagus / Baik', hint: 'Dibaca: i-i' },
-            { char: '悪い (わるい)', romaji: 'Warui', meaning: 'Buruk / Jelek', hint: 'Dibaca: wa-ru-i' },
-            { char: '楽しい (たのしい)', romaji: 'Tanoshii', meaning: 'Menyenangkan', hint: 'Dibaca: ta-no-shi-i' },
-            { char: '美味しい (おいしい)', romaji: 'Oishii', meaning: 'Enak / Lezat', hint: 'Dibaca: o-i-shi-i' },
-            { char: '熱い (あつい)', romaji: 'Atsui', meaning: 'Panas', hint: 'Dibaca: a-tsu-i' },
-            { char: '寒い (さむい)', romaji: 'Samui', meaning: 'Dingin (Cuaca)', hint: 'Dibaca: sa-mu-i' },
-
-            // Kata Kerja Dasar
-            { char: '行く (いく)', romaji: 'Iku', meaning: 'Pergi', hint: 'Dibaca: i-ku' },
-            { char: '来る (くる)', romaji: 'Kuru', meaning: 'Datang', hint: 'Dibaca: ku-ru' },
-            { char: '食べる (たべる)', romaji: 'Taberu', meaning: 'Makan', hint: 'Dibaca: ta-be-ru' },
-            { char: '飲む (のむ)', romaji: 'Nomu', meaning: 'Minum', hint: 'Dibaca: no-mu' },
-            { char: '見る (みる)', romaji: 'Miru', meaning: 'Melihat', hint: 'Dibaca: mi-ru' },
-            { char: '聞く (きく)', romaji: 'Kiku', meaning: 'Mendengar / Bertanya', hint: 'Dibaca: ki-ku' },
-            { char: '話す (はなす)', romaji: 'Hanasu', meaning: 'Berbicara', hint: 'Dibaca: ha-na-su' },
-            { char: '買う (かう)', romaji: 'Kau', meaning: 'Membeli', hint: 'Dibaca: ka-u' }
+            { char: 'こんにちは', romaji: 'Konnichiwa', meaning: 'Halo / Selamat Siang', hint: 'Salam siang hari' },
+            { char: 'ありがとう', romaji: 'Arigatou', meaning: 'Terima Kasih', hint: 'Ungkapan terima kasih' },
+            { char: 'さようなら', romaji: 'Sayounara', meaning: 'Selamat Tinggal', hint: 'Ungkapan berpisah' },
+            { char: 'おはよう', romaji: 'Ohayou', meaning: 'Selamat Pagi', hint: 'Salam pagi hari' },
+            { char: 'こんばんは', romaji: 'Konbanwa', meaning: 'Selamat Malam', hint: 'Salam malam hari' },
+            { char: 'すみません', romaji: 'Sumimasen', meaning: 'Permisi / Maaf', hint: 'Ungkapan maaf/permisi' },
+            { char: 'はい', romaji: 'Hai', meaning: 'Ya', hint: 'Jawaban setuju' },
+            { char: 'いいえ', romaji: 'Iie', meaning: 'Tidak', hint: 'Jawaban menolak' },
+            { char: 'おねがいします', romaji: 'Onegaishimasu', meaning: 'Minta Tolong / Silakan', hint: 'Meminta bantuan' },
+            { char: 'ごめんなさい', romaji: 'Gomennasai', meaning: 'Mohon Maaf', hint: 'Minta maaf kasual' },
+            { char: 'どうぞ', romaji: 'Douzo', meaning: 'Silakan', hint: 'Menawarkan sesuatu' },
+            { char: 'はじめまして', romaji: 'Hajimemashite', meaning: 'Salam Kenal', hint: 'Pertemuan pertama' },
+            { char: 'おやすみなさい', romaji: 'Oyasuminasai', meaning: 'Selamat Tidur', hint: 'Salam sebelum tidur' },
+            { char: 'いただきます', romaji: 'Itadakimasu', meaning: 'Selamat Makan', hint: 'Sebelum makan' },
+            { char: 'ごちそうさまでした', romaji: 'Gochisousamadeshita', meaning: 'Terima Kasih Atas Makanan', hint: 'Sesudah makan' },
+            { char: 'いってきます', romaji: 'Ittekimasu', meaning: 'Saya Berangkat', hint: 'Saat keluar rumah' },
+            { char: 'いってらっしゃい', romaji: 'Itterasshai', meaning: 'Selamat Jalan', hint: 'Melepas orang pergi' },
+            { char: 'ただいま', romaji: 'Tadaima', meaning: 'Saya Pulang', hint: 'Saat sampai rumah' },
+            { char: 'おかえりなさい', romaji: 'Okaerinasai', meaning: 'Selamat Datang Pulang', hint: 'Menyambut orang pulang' },
+            { char: 'おめでとう', romaji: 'Omedetou', meaning: 'Selamat!', hint: 'Ucapan selamat' },
+            { char: 'ひと', romaji: 'Hito', meaning: 'Orang', hint: 'Manusia / orang' },
+            { char: 'かぞく', romaji: 'Kazoku', meaning: 'Keluarga', hint: 'Anggota keluarga' },
+            { char: 'ちち', romaji: 'Chichi', meaning: 'Ayah (Sendiri)', hint: 'Ayah kandung' },
+            { char: 'はは', romaji: 'Haha', meaning: 'Ibu (Sendiri)', hint: 'Ibu kandung' },
+            { char: 'あに', romaji: 'Ani', meaning: 'Kakak Laki-laki', hint: 'Kakak pria' },
+            { char: 'あね', romaji: 'Ane', meaning: 'Kakak Perempuan', hint: 'Kakak wanita' },
+            { char: 'おとうと', romaji: 'Otouto', meaning: 'Adik Laki-laki', hint: 'Adik pria' },
+            { char: 'いもうと', romaji: 'Imouto', meaning: 'Adik Perempuan', hint: 'Adik wanita' },
+            { char: 'おとこ', romaji: 'Otoko', meaning: 'Pria / Laki-laki', hint: 'Jenis kelamin pria' },
+            { char: 'おんな', romaji: 'Onna', meaning: 'Wanita / Perempuan', hint: 'Jenis kelamin wanita' },
+            { char: 'こども', romaji: 'Kodomo', meaning: 'Anak-anak', hint: 'Anak kecil' },
+            { char: 'ともだち', romaji: 'Tomodachi', meaning: 'Teman', hint: 'Sahabat / kawan' },
+            { char: 'せんせい', romaji: 'Sensei', meaning: 'Guru / Dosen', hint: 'Pengajar' },
+            { char: 'がくせい', romaji: 'Gakusei', meaning: 'Siswa / Murid', hint: 'Pelajar' },
+            { char: 'いしゃ', romaji: 'Isha', meaning: 'Dokter', hint: 'Tenaga medis' },
+            { char: 'あたま', romaji: 'Atama', meaning: 'Kepala', hint: 'Bagian atas tubuh' },
+            { char: 'かお', romaji: 'Kao', meaning: 'Wajah', hint: 'Muka' },
+            { char: 'め', romaji: 'Me', meaning: 'Mata', hint: 'Indera penglihatan' },
+            { char: 'みみ', romaji: 'Mimi', meaning: 'Telinga', hint: 'Indera pendengaran' },
+            { char: 'はな', romaji: 'Hana', meaning: 'Hidung', hint: 'Indera penciuman' },
+            { char: 'くち', romaji: 'Kuchi', meaning: 'Mulut', hint: 'Bagian untuk makan' },
+            { char: 'は', romaji: 'Ha', meaning: 'Gigi', hint: 'Gigi pengunyah' },
+            { char: 'て', romaji: 'Te', meaning: 'Tangan', hint: 'Anggota gerak atas' },
+            { char: 'ゆび', romaji: 'Yubi', meaning: 'Jari', hint: 'Jari tangan/kaki' },
+            { char: 'あし', romaji: 'Ashi', meaning: 'Kaki', hint: 'Anggota gerak bawah' },
+            { char: 'おなか', romaji: 'Onaka', meaning: 'Perut', hint: 'Bagian perut' },
+            { char: 'せなか', romaji: 'Senaka', meaning: 'Punggung', hint: 'Bagian belakang tubuh' },
+            { char: 'からだ', romaji: 'Karada', meaning: 'Tubuh / Badan', hint: 'Fisik manusia' },
+            { char: 'こころ', romaji: 'Kokoro', meaning: 'Hati / Jiwa', hint: 'Perasaan / batin' },
+            { char: 'かみ', romaji: 'Kami', meaning: 'Rambut', hint: 'Mahkota kepala' },
+            { char: 'いぬ', romaji: 'Inu', meaning: 'Anjing', hint: 'Hewan peliharaan' },
+            { char: 'ねこ', romaji: 'Neko', meaning: 'Kucing', hint: 'Hewan peliharaan' },
+            { char: 'とり', romaji: 'Tori', meaning: 'Burung', hint: 'Hewan bersayap' },
+            { char: 'さかな', romaji: 'Sakana', meaning: 'Ikan', hint: 'Hewan air' },
+            { char: 'むし', romaji: 'Mushi', meaning: 'Serangga', hint: 'Hewan kecil' },
+            { char: 'やま', romaji: 'Yama', meaning: 'Gunung', hint: 'Daratan tinggi' },
+            { char: 'かわ', romaji: 'Kawa', meaning: 'Sungai', hint: 'Aliran air' },
+            { char: 'うみ', romaji: 'Umi', meaning: 'Laut', hint: 'Samudra luas' },
+            { char: 'そら', romaji: 'Sora', meaning: 'Langit', hint: 'Angkasa di atas' },
+            { char: 'つき', romaji: 'Tsuki', meaning: 'Bulan', hint: 'Satelit bumi' },
+            { char: 'ほし', romaji: 'Hoshi', meaning: 'Bintang', hint: 'Benda langit malam' },
+            { char: 'たいよう', romaji: 'Taiyou', meaning: 'Matahari', hint: 'Sumber cahaya siang' },
+            { char: 'あめ', romaji: 'Ame', meaning: 'Hujan', hint: 'Air jatuh dari langit' },
+            { char: 'ゆき', romaji: 'Yuki', meaning: 'Salju', hint: 'Kristal es dingin' },
+            { char: 'かぜ', romaji: 'Kaze', meaning: 'Angin', hint: 'Hembusan udara' },
+            { char: 'くも', romaji: 'Kumo', meaning: 'Awan', hint: 'Gumpalan putih di langit' },
+            { char: 'き', romaji: 'Ki', meaning: 'Pohon', hint: 'Tumbuhan tinggi' },
+            { char: 'くさ', romaji: 'Kusa', meaning: 'Rumput', hint: 'Tumbuhan pendek' },
+            { char: 'さくら', romaji: 'Sakura', meaning: 'Bunga Sakura', hint: 'Bunga khas Jepang' },
+            { char: 'てんき', romaji: 'Tenki', meaning: 'Cuaca', hint: 'Kondisi udara' },
+            { char: 'たべもの', romaji: 'Tabemono', meaning: 'Makanan', hint: 'Segala jenis konsumsi' },
+            { char: 'のみもの', romaji: 'Nomimono', meaning: 'Minuman', hint: 'Segala jenis cairan minum' },
+            { char: 'みず', romaji: 'Mizu', meaning: 'Air Putih', hint: 'Air tawar jernih' },
+            { char: 'おちゃ', romaji: 'Ocha', meaning: 'Teh Hijau', hint: 'Teh khas Jepang' },
+            { char: 'ごはん', romaji: 'Gohan', meaning: 'Nasi', hint: 'Makanan pokok' },
+            { char: 'パン', romaji: 'Pan', meaning: 'Roti', hint: 'Makanan gandum' },
+            { char: 'にく', romaji: 'Niku', meaning: 'Daging', hint: 'Daging hewan' },
+            { char: 'たまご', romaji: 'Tamago', meaning: 'Telur', hint: 'Telur ayam/bebek' },
+            { char: 'やさい', romaji: 'Yasai', meaning: 'Sayuran', hint: 'Tumbuhan pangan' },
+            { char: 'くだもの', romaji: 'Kudamono', meaning: 'Buah-buahan', hint: 'Buah segar' },
+            { char: 'りんご', romaji: 'Ringo', meaning: 'Apel', hint: 'Buah apel' },
+            { char: 'みかん', romaji: 'Mikan', meaning: 'Jeruk', hint: 'Buah jeruk manis' },
+            { char: 'さとう', romaji: 'Satou', meaning: 'Gula', hint: 'Pemanis makanan' },
+            { char: 'しお', romaji: 'Shio', meaning: 'Garam', hint: 'Penyedap asin' },
+            { char: 'しょうゆ', romaji: 'Shouyu', meaning: 'Kecap Asin', hint: 'Bumbu kecap Jepang' },
+            { char: 'あさごはん', romaji: 'Asagohan', meaning: 'Sarapan', hint: 'Makan pagi' },
+            { char: 'ひるごはん', romaji: 'Hirugohan', meaning: 'Makan Siang', hint: 'Makan di tengah hari' },
+            { char: 'ばんごはん', romaji: 'Bangohan', meaning: 'Makan Malam', hint: 'Makan malam hari' },
+            { char: 'おかし', romaji: 'Okashi', meaning: 'Cemilan / Permen', hint: 'Makanan ringan' },
+            { char: 'おべんとう', romaji: 'Obentou', meaning: 'Bekal Makanan', hint: 'Kotak bekal' },
+            { char: 'ほん', romaji: 'Hon', meaning: 'Buku', hint: 'Buku bacaan' },
+            { char: 'つくえ', romaji: 'Tsukue', meaning: 'Meja Belajar', hint: 'Meja kerja' },
+            { char: 'いす', romaji: 'Isu', meaning: 'Kursi', hint: 'Tempat duduk' },
+            { char: 'えんぴつ', romaji: 'Enpitsu', meaning: 'Pensil', hint: 'Alat tulis graphite' },
+            { char: 'ペン', romaji: 'Pen', meaning: 'Pena / Pulpen', hint: 'Alat tulis tinta' },
+            { char: 'かばん', romaji: 'Kaban', meaning: 'Tas', hint: 'Wadah bawaan' },
+            { char: 'とけい', romaji: 'Tokei', meaning: 'Jam', hint: 'Penunjuk waktu' },
+            { char: 'でんわ', romaji: 'Denwa', meaning: 'Telepon', hint: 'Alat komunikasi' },
+            { char: 'けいたい', romaji: 'Keitai', meaning: 'HP / Ponsel', hint: 'Telepon genggam' },
+            { char: 'おかね', romaji: 'Okane', meaning: 'Uang', hint: 'Alat pembayaran' },
+            { char: 'さいふ', romaji: 'Saifu', meaning: 'Dompet', hint: 'Wadah simpan uang' },
+            { char: 'かぎ', romaji: 'Kagi', meaning: 'Kunci', hint: 'Alat pengunci pintu' },
+            { char: 'かさ', romaji: 'Kasa', meaning: 'Payung', hint: 'Pelindung hujan' },
+            { char: 'くつ', romaji: 'Kutsu', meaning: 'Sepatu', hint: 'Alas kaki' },
+            { char: 'ふく', romaji: 'Fuku', meaning: 'Baju / Pakaian', hint: 'Busana tubuh' },
+            { char: 'めがね', romaji: 'Megane', meaning: 'Kacamata', hint: 'Alat bantu penglihatan' },
+            { char: 'テレビ', romaji: 'Terebi', meaning: 'Televisi', hint: 'Layar siaran' },
+            { char: 'カメラ', romaji: 'Kamera', meaning: 'Kamera', hint: 'Alat potret' },
+            { char: 'くるま', romaji: 'Kuruma', meaning: 'Mobil', hint: 'Kendaraan roda empat' },
+            { char: 'じてんしゃ', romaji: 'Jitensha', meaning: 'Sepeda', hint: 'Kendaraan kayuh' },
+            { char: 'いえ', romaji: 'Ie', meaning: 'Rumah', hint: 'Tempat tinggal' },
+            { char: 'へや', romaji: 'Heya', meaning: 'Kamar', hint: 'Ruangan' },
+            { char: 'がっこう', romaji: 'Gakkou', meaning: 'Sekolah', hint: 'Tempat belajar' },
+            { char: 'えき', romaji: 'Eki', meaning: 'Stasiun Kereta', hint: 'Pemberhentian kereta' },
+            { char: 'みせ', romaji: 'Mise', meaning: 'Toko', hint: 'Tempat berbelanja' },
+            { char: 'びょういん', romaji: 'Byouin', meaning: 'Rumah Sakit', hint: 'Tempat pengobatan' },
+            { char: 'ぎんこう', romaji: 'Ginkou', meaning: 'Bank', hint: 'Tempat simpan uang' },
+            { char: 'こうえん', romaji: 'Kouen', meaning: 'Taman', hint: 'Taman terbuka' },
+            { char: 'きょう', romaji: 'Kyou', meaning: 'Hari Ini', hint: 'Waktu saat ini' },
+            { char: 'あした', romaji: 'Ashita', meaning: 'Besok', hint: 'Hari berikutnya' },
+            { char: 'きのう', romaji: 'Kinou', meaning: 'Kemarin', hint: 'Hari sebelumnya' },
+            { char: 'いま', romaji: 'Ima', meaning: 'Sekarang', hint: 'Momen ini' },
+            { char: 'あさ', romaji: 'Asa', meaning: 'Pagi Hari', hint: 'Waktu fajar/pagi' },
+            { char: 'ひる', romaji: 'Hiru', meaning: 'Siang Hari', hint: 'Waktu tengah hari' },
+            { char: 'よる', romaji: 'Yoru', meaning: 'Malam Hari', hint: 'Waktu gelap' },
+            { char: 'うえ', romaji: 'Ue', meaning: 'Atas', hint: 'Posisi di atas' },
+            { char: 'した', romaji: 'Shita', meaning: 'Bawah', hint: 'Posisi di bawah' },
+            { char: 'まえ', romaji: 'Mae', meaning: 'Depan', hint: 'Posisi di depan' },
+            { char: 'うしろ', romaji: 'Ushiro', meaning: 'Belakang', hint: 'Posisi di belakang' },
+            { char: 'なか', romaji: 'Naka', meaning: 'Dalam', hint: 'Posisi di dalam' },
+            { char: 'たべる', romaji: 'Taberu', meaning: 'Makan', hint: 'Kata kerja makan' },
+            { char: 'のむ', romaji: 'Nomu', meaning: 'Minum', hint: 'Kata kerja minum' },
+            { char: 'みる', romaji: 'Miru', meaning: 'Melihat', hint: 'Kata kerja nonton/lihat' },
+            { char: 'きく', romaji: 'Kiku', meaning: 'Mendengar', hint: 'Kata kerja dengar' },
+            { char: 'よむ', romaji: 'Yomu', meaning: 'Membaca', hint: 'Kata kerja baca' },
+            { char: 'かく', romaji: 'Kaku', meaning: 'Menulis', hint: 'Kata kerja tulis' },
+            { char: 'はなす', romaji: 'Hanasu', meaning: 'Berbicara', hint: 'Kata kerja bicara' },
+            { char: 'いく', romaji: 'Iku', meaning: 'Pergi', hint: 'Kata kerja bepergian' },
+            { char: 'くる', romaji: 'Kuru', meaning: 'Datang', hint: 'Kata kerja datang' },
+            { char: 'かえる', romaji: 'Kaeru', meaning: 'Pulang', hint: 'Kata kerja kembali' },
+            { char: 'ねる', romaji: 'Neru', meaning: 'Tidur', hint: 'Kata kerja istirahat' },
+            { char: 'おきる', romaji: 'Okiru', meaning: 'Bangun Tidur', hint: 'Kata kerja bangun' },
+            { char: 'おおきい', romaji: 'Ookii', meaning: 'Besar', hint: 'Ukuran besar' },
+            { char: 'ちいさい', romaji: 'Chiisai', meaning: 'Kecil', hint: 'Ukuran kecil' },
+            { char: 'たかい', romaji: 'Takai', meaning: 'Tinggi / Mahal', hint: 'Harga/ukuran tinggi' },
+            { char: 'やすい', romaji: 'Yasui', meaning: 'Murah', hint: 'Harga murah' },
+            { char: 'いい', romaji: 'Ii', meaning: 'Bagus / Baik', hint: 'Kualitas bagus' },
+            { char: 'わるい', romaji: 'Warui', meaning: 'Buruk / Jelek', hint: 'Kualitas buruk' },
+            { char: 'おいしい', romaji: 'Oishii', meaning: 'Enak / Lezat', hint: 'Rasa makanan' },
+            { char: 'たのしい', romaji: 'Tanoshii', meaning: 'Menyenangkan', hint: 'Perasaan gembira' }
         ];
 
         /* --- STATE VARIABLES --- */
         let currentMode = 'study'; // 'study' or 'quiz'
-        let currentCategory = 'hiragana'; // 'hiragana', 'katakana', 'vocab'
+        let currentCategory = 'hiragana'; // 'hiragana', 'katakana', 'iqro', 'vocab'
         let currentDifficulty = 'easy'; // 'easy' (10), 'medium' (25), 'hard' (50)
         let dataset = HIRAGANA_DATA;
         
@@ -683,16 +970,16 @@
             const btnMedium = document.getElementById('diff-btn-medium');
             const btnHard = document.getElementById('diff-btn-hard');
 
-            const activeClass = "py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-indigo-600 text-white border-indigo-600 shadow-sm";
-            const inactiveClass = "py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50";
+            const activeClass = "py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-indigo-600 text-white border-indigo-600 shadow-sm flex flex-col items-center";
+            const inactiveClass = "py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50 flex flex-col items-center";
 
             btnEasy.className = level === 'easy' ? activeClass : inactiveClass;
             btnMedium.className = level === 'medium' ? activeClass : inactiveClass;
             btnHard.className = level === 'hard' ? activeClass : inactiveClass;
 
-            btnEasy.querySelector('span').className = level === 'easy' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
-            btnMedium.querySelector('span').className = level === 'medium' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
-            btnHard.querySelector('span').className = level === 'hard' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
+            btnEasy.querySelector('span:nth-child(2)').className = level === 'easy' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
+            btnMedium.querySelector('span:nth-child(2)').className = level === 'medium' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
+            btnHard.querySelector('span:nth-child(2)').className = level === 'hard' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
 
             if (level === 'easy') totalQuestions = 10;
             else if (level === 'medium') totalQuestions = 25;
@@ -713,6 +1000,7 @@
             const currentHS = getHighScore();
             if (newScore > currentHS) {
                 localStorage.setItem(getHighScoreKey(), newScore.toString());
+                updateHighScoreDisplay();
                 return true;
             }
             return false;
@@ -721,7 +1009,12 @@
         function updateHighScoreDisplay() {
             const hsDisplay = document.getElementById('high-score-display');
             if (hsDisplay) {
-                hsDisplay.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i> Rekor: ${getHighScore()}`;
+                const categoryNames = { hiragana: 'Hiragana', katakana: 'Katakana', iqro: 'Gabungan', vocab: 'Kosakata' };
+                const diffNames = { easy: 'Mudah', medium: 'Sedang', hard: 'Sulit' };
+                const catLabel = categoryNames[currentCategory] || 'Hiragana';
+                const diffLabel = diffNames[currentDifficulty] || 'Mudah';
+                
+                hsDisplay.innerHTML = `<i class="fa-solid fa-trophy mr-1.5 text-amber-500"></i> Rekor Tertinggi (${catLabel} - ${diffLabel}): <span class="text-slate-800 font-extrabold text-sm">${getHighScore()}</span>`;
             }
         }
 
@@ -729,13 +1022,16 @@
             currentCategory = category;
             if (category === 'hiragana') dataset = HIRAGANA_DATA;
             else if (category === 'katakana') dataset = KATAKANA_DATA;
+            else if (category === 'iqro') dataset = IQRO_DATA;
             else if (category === 'vocab') dataset = VOCAB_DATA;
 
-            document.getElementById('mode-selection-screen').classList.add('hidden');
+            updateHighScoreDisplay();
 
             if (mode === 'study') {
+                document.getElementById('mode-selection-screen').classList.add('hidden');
                 startStudyMode();
             } else {
+                document.getElementById('mode-selection-screen').classList.add('hidden');
                 startQuizMode();
             }
         }
@@ -745,6 +1041,7 @@
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.add('hidden');
             document.getElementById('mode-selection-screen').classList.remove('hidden');
+            updateHighScoreDisplay();
         }
 
         /* --- MODE BELAJAR (FLASHCARD) LOGIC --- */
@@ -758,7 +1055,8 @@
             const titleBadge = document.getElementById('study-title-badge');
             if (currentCategory === 'hiragana') titleBadge.textContent = 'Hiragana (46)';
             else if (currentCategory === 'katakana') titleBadge.textContent = 'Katakana (46)';
-            else titleBadge.textContent = 'Kosakata (50+)';
+            else if (currentCategory === 'iqro') titleBadge.textContent = 'Gabungan Huruf (150)';
+            else titleBadge.textContent = 'Kosakata (150)';
 
             updateStudyCard();
             renderGridOverview();
@@ -773,7 +1071,7 @@
 
             setTimeout(() => {
                 document.getElementById('study-char-front').textContent = item.char;
-                document.getElementById('study-romaji-front').textContent = item.romaji;
+                document.getElementById('study-romaji-front').textContent = `Cara Baca: ${item.romaji}`;
                 document.getElementById('study-romaji-back').textContent = item.romaji;
                 document.getElementById('study-meaning-back').textContent = item.meaning;
                 document.getElementById('study-hint-back').textContent = item.hint || '';
@@ -888,7 +1186,7 @@
             // Display main character
             document.getElementById('question-char').textContent = currentItem.char;
             
-            // Pronunciation badge display condition
+            // Pronunciation badge display condition (only for vocabulary)
             const pronBadge = document.getElementById('question-pronunciation-badge');
             if (currentCategory === 'vocab') {
                 pronBadge.classList.remove('hidden');
@@ -922,7 +1220,7 @@
                 const btn = document.createElement('button');
                 btn.className = "option-btn w-full p-4 bg-white/90 hover:bg-white rounded-2xl border border-slate-200 text-center text-slate-800 font-extrabold shadow-sm transition-all text-sm flex flex-col items-center justify-center min-h-[70px]";
                 
-                // Show meaning for vocab quiz, or romaji for hiragana/katakana quiz
+                // Show meaning for vocab quiz, or romaji for hiragana/katakana/iqro quiz
                 if (currentCategory === 'vocab') {
                     btn.innerHTML = `<span>${option.meaning}</span>`;
                 } else {
