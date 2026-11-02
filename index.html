@@ -130,6 +130,27 @@
                     </button>
                 </div>
 
+                <!-- Difficulty Selector (Visible only in Quiz Mode) -->
+                <div id="difficulty-selector-container" class="hidden bg-white/70 p-4 rounded-2xl border border-white/80 shadow-sm space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-700"><i class="fa-solid fa-sliders text-indigo-500 mr-1"></i> Pilih Tingkat Kesulitan:</span>
+                        <span id="high-score-display" class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/60">
+                            <i class="fa-solid fa-trophy mr-1"></i> Rekor: 0
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setDifficulty('easy')" id="diff-btn-easy" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-indigo-600 text-white border-indigo-600 shadow-sm">
+                            Mudah<br><span class="text-[10px] opacity-80">(10 Soal)</span>
+                        </button>
+                        <button onclick="setDifficulty('medium')" id="diff-btn-medium" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50">
+                            Sedang<br><span class="text-[10px] text-slate-400">(25 Soal)</span>
+                        </button>
+                        <button onclick="setDifficulty('hard')" id="diff-btn-hard" class="py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50">
+                            Sulit<br><span class="text-[10px] text-slate-400">(50 Soal)</span>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <!-- Topic Hiragana -->
                     <div class="p-5 rounded-2xl bg-gradient-to-br from-rose-50 to-pink-100/70 border border-rose-200/60 text-left flex flex-col justify-between group">
@@ -346,6 +367,11 @@
                     <p id="result-subtitle" class="text-xs text-slate-500 mt-1">Kerja bagus, tetap pertahankan!</p>
                 </div>
 
+                <!-- NEW HIGH SCORE NOTIFICATION -->
+                <div id="new-highscore-badge" class="hidden bg-amber-400 text-slate-900 font-extrabold py-2 px-4 rounded-xl text-xs animate-bounce shadow-md">
+                    🎉 REKOR SKOR BARU DITERAPKAN! 🎉
+                </div>
+
                 <!-- SCORE STATS BOX -->
                 <div class="grid grid-cols-3 gap-3 bg-white/70 p-4 rounded-2xl border border-white/80 shadow-sm">
                     <div class="p-2">
@@ -362,10 +388,16 @@
                     </div>
                 </div>
 
+                <!-- HIGH SCORE BOARD SUMMARY -->
+                <div class="bg-indigo-50/80 p-3 rounded-xl border border-indigo-100 text-xs font-semibold text-indigo-700 flex justify-between items-center">
+                    <span>Rekor Tertinggi (<span id="summary-diff-label">Mudah</span>):</span>
+                    <span id="summary-highscore-val" class="font-extrabold text-indigo-900">0</span>
+                </div>
+
                 <!-- ACTION BUTTONS -->
                 <div class="space-y-2 pt-2">
                     <button onclick="restartCurrentGame()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-98">
-                        <i class="fa-solid fa-rotate-right mr-1.5"></i> Main Lagi
+                        <i class="fa-solid fa-rotate-right mr-1.5"></i> Main Lagi (Acak Ulang)
                     </button>
                     <button onclick="backToMenu()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all">
                         <i class="fa-solid fa-house mr-1.5"></i> Kembali ke Menu
@@ -595,6 +627,7 @@
         /* --- STATE VARIABLES --- */
         let currentMode = 'study'; // 'study' or 'quiz'
         let currentCategory = 'hiragana'; // 'hiragana', 'katakana', 'vocab'
+        let currentDifficulty = 'easy'; // 'easy' (10), 'medium' (25), 'hard' (50)
         let dataset = HIRAGANA_DATA;
         
         // Study state
@@ -613,6 +646,7 @@
         /* --- INITIALIZATION --- */
         window.onload = function() {
             switchMainTab('study');
+            updateHighScoreDisplay();
         };
 
         /* --- NAVIGATION & TAB LOGIC --- */
@@ -622,6 +656,7 @@
             const quizBtn = document.getElementById('tab-quiz-mode');
             const studyActions = document.querySelectorAll('.btn-action-study');
             const quizActions = document.querySelectorAll('.btn-action-quiz');
+            const diffSelector = document.getElementById('difficulty-selector-container');
             const tipText = document.getElementById('mode-tip-text');
 
             if (mode === 'study') {
@@ -629,13 +664,64 @@
                 quizBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all font-bold";
                 studyActions.forEach(el => el.classList.remove('hidden'));
                 quizActions.forEach(el => el.classList.add('hidden'));
+                diffSelector.classList.add('hidden');
                 tipText.innerHTML = '<i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Mode Belajar: Ketuk kartu untuk membalik & dengarkan suara pelafalannya!';
             } else {
                 quizBtn.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 font-bold transition-all";
                 studyBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all font-bold";
                 quizActions.forEach(el => el.classList.remove('hidden'));
                 studyActions.forEach(el => el.classList.add('hidden'));
-                tipText.innerHTML = '<i class="fa-solid fa-gamepad text-indigo-500 mr-1"></i> Mode Kuis: Tes ingatanmu dengan 10 soal acak!';
+                diffSelector.classList.remove('hidden');
+                tipText.innerHTML = '<i class="fa-solid fa-gamepad text-indigo-500 mr-1"></i> Mode Kuis: Pilih tingkat kesulitan & uji kemampuanmu!';
+            }
+            updateHighScoreDisplay();
+        }
+
+        function setDifficulty(level) {
+            currentDifficulty = level;
+            const btnEasy = document.getElementById('diff-btn-easy');
+            const btnMedium = document.getElementById('diff-btn-medium');
+            const btnHard = document.getElementById('diff-btn-hard');
+
+            const activeClass = "py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-indigo-600 text-white border-indigo-600 shadow-sm";
+            const inactiveClass = "py-2 px-3 rounded-xl border text-xs font-bold transition-all bg-white text-slate-700 border-slate-200 hover:bg-slate-50";
+
+            btnEasy.className = level === 'easy' ? activeClass : inactiveClass;
+            btnMedium.className = level === 'medium' ? activeClass : inactiveClass;
+            btnHard.className = level === 'hard' ? activeClass : inactiveClass;
+
+            btnEasy.querySelector('span').className = level === 'easy' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
+            btnMedium.querySelector('span').className = level === 'medium' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
+            btnHard.querySelector('span').className = level === 'hard' ? "text-[10px] opacity-80" : "text-[10px] text-slate-400";
+
+            if (level === 'easy') totalQuestions = 10;
+            else if (level === 'medium') totalQuestions = 25;
+            else if (level === 'hard') totalQuestions = 50;
+
+            updateHighScoreDisplay();
+        }
+
+        function getHighScoreKey() {
+            return `japanese_quiz_hs_${currentCategory}_${currentDifficulty}`;
+        }
+
+        function getHighScore() {
+            return parseInt(localStorage.getItem(getHighScoreKey()) || '0', 10);
+        }
+
+        function saveHighScore(newScore) {
+            const currentHS = getHighScore();
+            if (newScore > currentHS) {
+                localStorage.setItem(getHighScoreKey(), newScore.toString());
+                return true;
+            }
+            return false;
+        }
+
+        function updateHighScoreDisplay() {
+            const hsDisplay = document.getElementById('high-score-display');
+            if (hsDisplay) {
+                hsDisplay.innerHTML = `<i class="fa-solid fa-trophy mr-1"></i> Rekor: ${getHighScore()}`;
             }
         }
 
@@ -765,7 +851,7 @@
         }
 
         function startQuizMode() {
-            // Shuffle dataset & select 10 questions
+            // Shuffle dataset & select target questions according to level
             const shuffled = shuffleArray(dataset);
             quizQueue = shuffled.slice(0, Math.min(totalQuestions, shuffled.length));
             
@@ -803,9 +889,6 @@
             } else {
                 pronBadge.classList.add('hidden');
             }
-
-            // Speak audio once on start of question
-            speakJapaneseText(currentItem.char);
 
             // Generate 4 options
             generateOptions(currentItem);
@@ -917,11 +1000,26 @@
             document.getElementById('result-screen').classList.remove('hidden');
 
             const totalScore = score;
-            const accuracy = Math.round((totalScore / (quizQueue.length * 10)) * 100);
+            const totalPossible = quizQueue.length * 10;
+            const accuracy = Math.round((totalScore / totalPossible) * 100);
 
             document.getElementById('final-score').textContent = totalScore;
             document.getElementById('final-accuracy').textContent = `${accuracy}%`;
             document.getElementById('final-streak').textContent = maxStreak;
+
+            // Check & update High Score
+            const isNewHighScore = saveHighScore(totalScore);
+            const highscoreBadge = document.getElementById('new-highscore-badge');
+            if (isNewHighScore) {
+                highscoreBadge.classList.remove('hidden');
+            } else {
+                highscoreBadge.classList.add('hidden');
+            }
+
+            // Summary label info
+            const diffNames = { easy: 'Mudah', medium: 'Sedang', hard: 'Sulit' };
+            document.getElementById('summary-diff-label').textContent = `${currentCategory.toUpperCase()} - ${diffNames[currentDifficulty]}`;
+            document.getElementById('summary-highscore-val').textContent = getHighScore();
 
             const badge = document.getElementById('result-badge');
             const subtitle = document.getElementById('result-subtitle');
