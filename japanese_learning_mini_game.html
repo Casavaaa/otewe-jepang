@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日本語 Learner - Japanese Mini Game</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #fce7f3 0%, #e0e7ff 50%, #ddd6fe 100%);
+            min-height: 100vh;
+        }
+        
+        .japanese-font {
+            font-family: 'Kosugi Maru', sans-serif;
+        }
+
+        /* Custom Soft Glassmorphism */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.03);
+        }
+
+        /* 3D Flashcard Flip Effect */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Card Button Press Animation */
+        .option-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .option-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Shake animation for incorrect answer */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        /* Pulse animation for correct answer */
+        @keyframes correctPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .animate-correct {
+            animation: correctPulse 0.4s ease-in-out;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4 sm:p-6 min-h-screen">
+
+    <div class="w-full max-w-xl mx-auto">
+        <!-- HEADER / LOGO -->
+        <header class="text-center mb-6">
+            <div class="inline-flex items-center gap-2 bg-white/70 px-4 py-1.5 rounded-full shadow-sm border border-white/80 mb-2">
+                <span class="text-rose-500 font-bold japanese-font text-lg">日本語</span>
+                <span class="text-xs text-gray-500 font-semibold uppercase tracking-wider">Learner Hub</span>
+            </div>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-800 tracking-tight">Belajar Bahasa Jepang</h1>
+            <p class="text-sm text-slate-600 mt-1">Pelajari huruf & kosakata, lalu uji kemampuanmu!</p>
+        </header>
+
+        <!-- MAIN CONTAINER -->
+        <main class="glass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden transition-all duration-300">
+            
+            <!-- SECTION 1: MAIN MENU (STUDY VS QUIZ) -->
+            <section id="mode-selection-screen" class="space-y-6">
+                <div class="text-center">
+                    <h2 class="text-xl font-bold text-slate-800">Pilih Mode & Materi</h2>
+                    <p class="text-xs text-slate-500 mt-1">Pilih untuk belajar dulu atau langsung uji kemampuan kuis</p>
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="flex p-1 bg-slate-200/60 rounded-xl max-w-xs mx-auto text-xs font-bold text-slate-600">
+                    <button id="tab-study-mode" onclick="switchMainTab('study')" class="flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 transition-all">
+                        <i class="fa-solid fa-book-open mr-1"></i> Mode Belajar
+                    </button>
+                    <button id="tab-quiz-mode" onclick="switchMainTab('quiz')" class="flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all">
+                        <i class="fa-solid fa-gamepad mr-1"></i> Mode Kuis
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <!-- Topic Hiragana -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-rose-50 to-pink-100/70 border border-rose-200/60 text-left flex flex-col justify-between group">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-600 flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform japanese-font">あ</div>
+                            <h3 class="font-bold text-slate-800 text-lg">Hiragana</h3>
+                            <p class="text-xs text-slate-500 mt-1">Huruf dasar Jepang (あ, い, う, え, お)</p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-rose-200/40 flex flex-col gap-2">
+                            <button onclick="selectCategory('hiragana', 'study')" class="btn-action-study w-full py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-graduation-cap"></i> Belajar Huruf
+                            </button>
+                            <button onclick="selectCategory('hiragana', 'quiz')" class="btn-action-quiz hidden w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-play"></i> Mulai Kuis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Topic Katakana -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-sky-50 to-indigo-100/70 border border-sky-200/60 text-left flex flex-col justify-between group">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-600 flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform japanese-font">ア</div>
+                            <h3 class="font-bold text-slate-800 text-lg">Katakana</h3>
+                            <p class="text-xs text-slate-500 mt-1">Kata serapan asing (ア, イ, ウ, エ, オ)</p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-sky-200/40 flex flex-col gap-2">
+                            <button onclick="selectCategory('katakana', 'study')" class="btn-action-study w-full py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-graduation-cap"></i> Belajar Huruf
+                            </button>
+                            <button onclick="selectCategory('katakana', 'quiz')" class="btn-action-quiz hidden w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-play"></i> Mulai Kuis
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Topic Vocabulary -->
+                    <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-100/70 border border-emerald-200/60 text-left flex flex-col justify-between group">
+                        <div>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xl font-bold mb-3 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-language"></i>
+                            </div>
+                            <h3 class="font-bold text-slate-800 text-lg">Kosakata</h3>
+                            <p class="text-xs text-slate-500 mt-1">Ungkapan & kata sehari-hari</p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-emerald-200/40 flex flex-col gap-2">
+                            <button onclick="selectCategory('vocab', 'study')" class="btn-action-study w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-graduation-cap"></i> Belajar Kartu
+                            </button>
+                            <button onclick="selectCategory('vocab', 'quiz')" class="btn-action-quiz hidden w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold shadow-sm transition-all flex items-center justify-center gap-1">
+                                <i class="fa-solid fa-play"></i> Mulai Kuis
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-2 text-center">
+                    <p id="mode-tip-text" class="text-xs text-slate-400"><i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Mode Belajar: Ketuk kartu untuk membalik & dengarkan suara pelafalannya!</p>
+                </div>
+            </section>
+
+            <!-- SECTION 2: STUDY MODE (FLASHCARD VIEW) -->
+            <section id="study-screen" class="hidden space-y-6">
+                <!-- Top Navigation Bar -->
+                <div class="flex items-center justify-between text-xs font-bold text-slate-600 border-b border-slate-100 pb-3">
+                    <button onclick="backToMenu()" class="text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1">
+                        <i class="fa-solid fa-arrow-left"></i> Menu Utama
+                    </button>
+                    <span id="study-title-badge" class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-full font-bold">
+                        Hiragana
+                    </span>
+                    <span id="study-counter" class="text-slate-500">1 / 25</span>
+                </div>
+
+                <!-- Interactive Flashcard Component -->
+                <div class="flip-card w-full h-72 cursor-pointer" id="flashcard-element" onclick="flipCard()">
+                    <div class="flip-card-inner w-full h-full relative rounded-2xl shadow-md border border-slate-100">
+                        <!-- FRONT SIDE -->
+                        <div class="flip-card-front absolute inset-0 bg-white rounded-2xl flex flex-col items-center justify-center p-6 text-center space-y-2">
+                            <span class="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Klik/Sentuh Untuk Membalik Kartu</span>
+                            <!-- Character -->
+                            <div id="study-char-front" class="japanese-font text-5xl sm:text-6xl font-extrabold text-slate-800">
+                                あ
+                            </div>
+                            <!-- Pronunciation / Romaji (Front View) -->
+                            <div class="inline-block bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100/80">
+                                <span class="text-xs text-slate-400 font-semibold mr-1">Cara Baca:</span>
+                                <span id="study-romaji-front" class="text-sm font-extrabold text-indigo-600">a</span>
+                            </div>
+                            <!-- Audio Button -->
+                            <button onclick="speakCurrent(event)" class="mt-1 w-9 h-9 rounded-full bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-600 flex items-center justify-center transition-all shadow-sm" title="Dengarkan Suara">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                        </div>
+
+                        <!-- BACK SIDE -->
+                        <div class="flip-card-back absolute inset-0 bg-gradient-to-br from-indigo-600 to-violet-700 text-white rounded-2xl flex flex-col items-center justify-center p-6 text-center space-y-2">
+                            <span class="text-[10px] text-indigo-200 uppercase tracking-wider font-semibold">Detail Pelafalan & Arti</span>
+                            <div id="study-romaji-back" class="text-3xl font-extrabold tracking-wide">
+                                a
+                            </div>
+                            <div id="study-meaning-back" class="text-sm text-indigo-100 font-semibold bg-white/10 px-3 py-1 rounded-lg">
+                                Suara Vokal "A"
+                            </div>
+                            <p id="study-hint-back" class="text-xs text-indigo-200 italic max-w-xs">
+                                Dibaca dibibir seperti huruf 'a' pada kata "Aku"
+                            </p>
+                            <button onclick="speakCurrent(event)" class="mt-2 px-4 py-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white text-xs font-semibold flex items-center gap-2 transition-all">
+                                <i class="fa-solid fa-volume-high"></i> Putar Suara
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center justify-between gap-3">
+                    <button onclick="prevStudyCard()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-chevron-left"></i> Sebelumnya
+                    </button>
+                    <button onclick="toggleGridOverview()" class="py-2.5 px-4 bg-white border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold rounded-xl text-xs transition-all shadow-sm" title="Daftar Semua Huruf">
+                        <i class="fa-solid fa-table-cells"></i>
+                    </button>
+                    <button onclick="nextStudyCard()" class="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1 shadow-sm">
+                        Berikutnya <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Grid Quick Selection Modal / Collapsible -->
+                <div id="grid-overview-container" class="hidden bg-white/90 p-4 rounded-2xl border border-slate-200 max-h-48 overflow-y-auto">
+                    <p class="text-xs font-bold text-slate-500 mb-2">Pilih Karakter Langsung:</p>
+                    <div id="grid-overview-items" class="grid grid-cols-5 sm:grid-cols-8 gap-2">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+
+                <!-- CTA to Quiz -->
+                <div class="pt-2">
+                    <button onclick="startQuizFromStudy()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-gamepad text-sm"></i> Uji Kemampuan (Mulai Kuis Soal Ini)
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECTION 3: QUIZ GAMEPLAY -->
+            <section id="quiz-screen" class="hidden space-y-6">
+                <!-- TOP BAR: PROGRESS & STATS -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-600">
+                        <button onclick="showCustomConfirm()" class="text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1 py-1 px-2 rounded-lg hover:bg-slate-100">
+                            <i class="fa-solid fa-xmark text-base"></i> Keluar
+                        </button>
+                        <div class="flex items-center gap-4">
+                            <span id="streak-counter" class="text-amber-500 flex items-center gap-1">
+                                <i class="fa-solid fa-fire"></i> <span id="streak-val">0</span>
+                            </span>
+                            <span class="text-slate-700 bg-white/80 px-2.5 py-1 rounded-full border border-slate-200 shadow-sm">
+                                Skor: <span id="score-val" class="text-indigo-600">0</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-200/70 h-2.5 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="bg-indigo-500 h-full w-0 transition-all duration-300 rounded-full"></div>
+                    </div>
+                </div>
+
+                <!-- QUESTION DISPLAY AREA -->
+                <div id="question-card" class="bg-white/90 rounded-2xl p-6 sm:p-8 text-center border border-slate-100 shadow-sm relative transition-all duration-200">
+                    <span id="question-index" class="absolute top-3 left-4 text-xs font-bold text-slate-400">Soal 1/10</span>
+                    <div id="question-char" class="japanese-font text-5xl sm:text-6xl font-extrabold text-slate-800 my-4 tracking-wide">
+                        あ
+                    </div>
+                    <p id="question-prompt" class="text-xs text-slate-500 font-medium">Pilih Romaji / Arti yang benar:</p>
+                </div>
+
+                <!-- OPTIONS GRID -->
+                <div id="options-container" class="grid grid-cols-2 gap-3">
+                    <!-- Dynamic Answer Buttons will be injected here -->
+                </div>
+
+                <!-- FEEDBACK / EXPLANATION MODAL -->
+                <div id="feedback-banner" class="hidden p-4 rounded-xl text-center space-y-2 transition-all">
+                    <div class="flex items-center justify-center gap-2 font-bold text-sm" id="feedback-title">
+                        <!-- Filled dynamically -->
+                    </div>
+                    <div id="feedback-detail" class="text-xs space-y-0.5">
+                        <!-- Filled dynamically -->
+                    </div>
+                    <button id="next-btn" onclick="nextQuestion()" class="mt-2 w-full py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-700 active:scale-95 transition-all">
+                        Lanjut Soal Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECTION 3: END RESULT SCREEN -->
+            <section id="result-screen" class="hidden text-center space-y-6">
+                <div class="py-4">
+                    <div id="result-badge" class="w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-3xl mb-3 shadow-inner">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-slate-800">Selesai!</h2>
+                    <p id="result-subtitle" class="text-xs text-slate-500 mt-1">Kerja bagus, tetap pertahankan!</p>
+                </div>
+
+                <!-- SCORE STATS BOX -->
+                <div class="grid grid-cols-3 gap-3 bg-white/70 p-4 rounded-2xl border border-white/80 shadow-sm">
+                    <div class="p-2">
+                        <span class="block text-xs text-slate-400 font-medium">Skor Akhir</span>
+                        <span id="final-score" class="text-xl sm:text-2xl font-bold text-indigo-600">0</span>
+                    </div>
+                    <div class="p-2 border-x border-slate-200">
+                        <span class="block text-xs text-slate-400 font-medium">Akurasi</span>
+                        <span id="final-accuracy" class="text-xl sm:text-2xl font-bold text-emerald-600">0%</span>
+                    </div>
+                    <div class="p-2">
+                        <span class="block text-xs text-slate-400 font-medium">Max Streak</span>
+                        <span id="final-streak" class="text-xl sm:text-2xl font-bold text-amber-500">0</span>
+                    </div>
+                </div>
+
+                <!-- ACTION BUTTONS -->
+                <div class="space-y-2 pt-2">
+                    <button onclick="restartCurrentGame()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all active:scale-98">
+                        <i class="fa-solid fa-rotate-right mr-1.5"></i> Main Lagi
+                    </button>
+                    <button onclick="backToMenu()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all">
+                        <i class="fa-solid fa-house mr-1.5"></i> Kembali ke Menu
+                    </button>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- CUSTOM CONFIRMATION MODAL -->
+    <div id="custom-confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-all">
+        <div class="bg-white rounded-2xl p-6 max-w-xs w-full text-center space-y-4 shadow-xl border border-slate-100 animate-correct">
+            <div class="w-12 h-12 mx-auto rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-slate-800 text-base">Keluar dari Kuis?</h3>
+                <p class="text-xs text-slate-500 mt-1">Progres skor dan streak di ronde ini akan hilang.</p>
+            </div>
+            <div class="flex gap-2 pt-1">
+                <button onclick="hideCustomConfirm()" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">
+                    Batal
+                </button>
+                <button onclick="confirmExit()" class="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs transition-all shadow-sm">
+                    Ya, Keluar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        /* --- GAME DATASET (LENGKAP 46 HURUF GOJUON) --- */
+        const HIRAGANA_DATA = [
+            // Vokal (5)
+            { char: 'あ', romaji: 'a', meaning: 'Vokal "A"', hint: 'Pelafalan: seperti "a" dalam "aku"' },
+            { char: 'い', romaji: 'i', meaning: 'Vokal "I"', hint: 'Pelafalan: seperti "i" dalam "ibu"' },
+            { char: 'う', romaji: 'u', meaning: 'Vokal "U"', hint: 'Pelafalan: seperti "u" dalam "ular"' },
+            { char: 'え', romaji: 'e', meaning: 'Vokal "E"', hint: 'Pelafalan: seperti "e" dalam "enak"' },
+            { char: 'お', romaji: 'o', meaning: 'Vokal "O"', hint: 'Pelafalan: seperti "o" dalam "orang"' },
+            // Baris K (5)
+            { char: 'か', romaji: 'ka', meaning: 'Baris K - KA', hint: 'Pelafalan: ka (k + a)' },
+            { char: 'き', romaji: 'ki', meaning: 'Baris K - KI', hint: 'Pelafalan: ki (k + i)' },
+            { char: 'く', romaji: 'ku', meaning: 'Baris K - KU', hint: 'Pelafalan: ku (k + u)' },
+            { char: 'け', romaji: 'ke', meaning: 'Baris K - KE', hint: 'Pelafalan: ke (k + e)' },
+            { char: 'こ', romaji: 'ko', meaning: 'Baris K - KO', hint: 'Pelafalan: ko (k + o)' },
+            // Baris S (5)
+            { char: 'さ', romaji: 'sa', meaning: 'Baris S - SA', hint: 'Pelafalan: sa (s + a)' },
+            { char: 'し', romaji: 'shi', meaning: 'Baris S - SHI', hint: 'Pelafalan: shi (seperti "sy" dalam "syarat")' },
+            { char: 'す', romaji: 'su', meaning: 'Baris S - SU', hint: 'Pelafalan: su (s + u)' },
+            { char: 'せ', romaji: 'se', meaning: 'Baris S - SE', hint: 'Pelafalan: se (s + e)' },
+            { char: 'そ', romaji: 'so', meaning: 'Baris S - SO', hint: 'Pelafalan: so (s + o)' },
+            // Baris T (5)
+            { char: 'た', romaji: 'ta', meaning: 'Baris T - TA', hint: 'Pelafalan: ta (t + a)' },
+            { char: 'ち', romaji: 'chi', meaning: 'Baris T - CHI', hint: 'Pelafalan: chi (seperti "ch" atau "ci")' },
+            { char: 'つ', romaji: 'tsu', meaning: 'Baris T - TSU', hint: 'Pelafalan: tsu (bunyi t + su lembut)' },
+            { char: 'て', romaji: 'te', meaning: 'Baris T - TE', hint: 'Pelafalan: te (t + e)' },
+            { char: 'と', romaji: 'to', meaning: 'Baris T - TO', hint: 'Pelafalan: to (t + o)' },
+            // Baris N (5)
+            { char: 'な', romaji: 'na', meaning: 'Baris N - NA', hint: 'Pelafalan: na (n + a)' },
+            { char: 'に', romaji: 'ni', meaning: 'Baris N - NI', hint: 'Pelafalan: ni (n + i)' },
+            { char: 'ぬ', romaji: 'nu', meaning: 'Baris N - NU', hint: 'Pelafalan: nu (n + u)' },
+            { char: 'ね', romaji: 'ne', meaning: 'Baris N - NE', hint: 'Pelafalan: ne (n + e)' },
+            { char: 'の', romaji: 'no', meaning: 'Baris N - NO', hint: 'Pelafalan: no (n + o)' },
+            // Baris H (5)
+            { char: 'は', romaji: 'ha', meaning: 'Baris H - HA', hint: 'Pelafalan: ha (h + a)' },
+            { char: 'ひ', romaji: 'hi', meaning: 'Baris H - HI', hint: 'Pelafalan: hi (h + i)' },
+            { char: 'ふ', romaji: 'fu', meaning: 'Baris H - FU', hint: 'Pelafalan: fu (seperti hembusan f/h)' },
+            { char: 'へ', romaji: 'he', meaning: 'Baris H - HE', hint: 'Pelafalan: he (h + e)' },
+            { char: 'ほ', romaji: 'ho', meaning: 'Baris H - HO', hint: 'Pelafalan: ho (h + o)' },
+            // Baris M (5)
+            { char: 'ま', romaji: 'ma', meaning: 'Baris M - MA', hint: 'Pelafalan: ma (m + a)' },
+            { char: 'み', romaji: 'mi', meaning: 'Baris M - MI', hint: 'Pelafalan: mi (m + i)' },
+            { char: 'む', romaji: 'mu', meaning: 'Baris M - MU', hint: 'Pelafalan: mu (m + u)' },
+            { char: 'め', romaji: 'me', meaning: 'Baris M - ME', hint: 'Pelafalan: me (m + e)' },
+            { char: 'も', romaji: 'mo', meaning: 'Baris M - MO', hint: 'Pelafalan: mo (m + o)' },
+            // Baris Y (3)
+            { char: 'や', romaji: 'ya', meaning: 'Baris Y - YA', hint: 'Pelafalan: ya (y + a)' },
+            { char: 'ゆ', romaji: 'yu', meaning: 'Baris Y - YU', hint: 'Pelafalan: yu (y + u)' },
+            { char: 'よ', romaji: 'yo', meaning: 'Baris Y - YO', hint: 'Pelafalan: yo (y + o)' },
+            // Baris R (5)
+            { char: 'ら', romaji: 'ra', meaning: 'Baris R - RA', hint: 'Pelafalan: ra (r lembut seperti l/r)' },
+            { char: 'り', romaji: 'ri', meaning: 'Baris R - RI', hint: 'Pelafalan: ri (r + i)' },
+            { char: 'る', romaji: 'ru', meaning: 'Baris R - RU', hint: 'Pelafalan: ru (r + u)' },
+            { char: 'れ', romaji: 're', meaning: 'Baris R - RE', hint: 'Pelafalan: re (r + e)' },
+            { char: 'ろ', romaji: 'ro', meaning: 'Baris R - RO', hint: 'Pelafalan: ro (r + o)' },
+            // Baris W & N (3)
+            { char: 'わ', romaji: 'wa', meaning: 'Baris W - WA', hint: 'Pelafalan: wa (w + a)' },
+            { char: 'を', romaji: 'wo', meaning: 'Baris W - WO/O', hint: 'Pelafalan: o/wo (partikel)' },
+            { char: 'ん', romaji: 'n', meaning: 'Konsonan N Single', hint: 'Pelafalan: n (bunyi sengau di akhir)' }
+        ];
+
+        const KATAKANA_DATA = [
+            // Vokal (5)
+            { char: 'ア', romaji: 'a', meaning: 'Katakana A', hint: 'Pelafalan: vokal "a"' },
+            { char: 'イ', romaji: 'i', meaning: 'Katakana I', hint: 'Pelafalan: vokal "i"' },
+            { char: 'ウ', romaji: 'u', meaning: 'Katakana U', hint: 'Pelafalan: vokal "u"' },
+            { char: 'エ', romaji: 'e', meaning: 'Katakana E', hint: 'Pelafalan: vokal "e"' },
+            { char: 'オ', romaji: 'o', meaning: 'Katakana O', hint: 'Pelafalan: vokal "o"' },
+            // Baris K (5)
+            { char: 'カ', romaji: 'ka', meaning: 'Katakana KA', hint: 'Pelafalan: suku kata ka' },
+            { char: 'キ', romaji: 'ki', meaning: 'Katakana KI', hint: 'Pelafalan: suku kata ki' },
+            { char: 'ク', romaji: 'ku', meaning: 'Katakana KU', hint: 'Pelafalan: suku kata ku' },
+            { char: 'ケ', romaji: 'ke', meaning: 'Katakana KE', hint: 'Pelafalan: suku kata ke' },
+            { char: 'コ', romaji: 'ko', meaning: 'Katakana KO', hint: 'Pelafalan: suku kata ko' },
+            // Baris S (5)
+            { char: 'サ', romaji: 'sa', meaning: 'Katakana SA', hint: 'Pelafalan: suku kata sa' },
+            { char: 'シ', romaji: 'shi', meaning: 'Katakana SHI', hint: 'Pelafalan: shi (seperti "sy")' },
+            { char: 'ス', romaji: 'su', meaning: 'Katakana SU', hint: 'Pelafalan: suku kata su' },
+            { char: 'セ', romaji: 'se', meaning: 'Katakana SE', hint: 'Pelafalan: suku kata se' },
+            { char: 'ソ', romaji: 'so', meaning: 'Katakana SO', hint: 'Pelafalan: suku kata so' },
+            // Baris T (5)
+            { char: 'タ', romaji: 'ta', meaning: 'Katakana TA', hint: 'Pelafalan: suku kata ta' },
+            { char: 'チ', romaji: 'chi', meaning: 'Katakana CHI', hint: 'Pelafalan: suku kata chi / ci' },
+            { char: 'ツ', romaji: 'tsu', meaning: 'Katakana TSU', hint: 'Pelafalan: suku kata tsu' },
+            { char: 'テ', romaji: 'te', meaning: 'Katakana TE', hint: 'Pelafalan: suku kata te' },
+            { char: 'ト', romaji: 'to', meaning: 'Katakana TO', hint: 'Pelafalan: suku kata to' },
+            // Baris N (5)
+            { char: 'ナ', romaji: 'na', meaning: 'Katakana NA', hint: 'Pelafalan: suku kata na' },
+            { char: 'ニ', romaji: 'ni', meaning: 'Katakana NI', hint: 'Pelafalan: suku kata ni' },
+            { char: 'ヌ', romaji: 'nu', meaning: 'Katakana NU', hint: 'Pelafalan: suku kata nu' },
+            { char: 'ネ', romaji: 'ne', meaning: 'Katakana NE', hint: 'Pelafalan: suku kata ne' },
+            { char: 'ノ', romaji: 'no', meaning: 'Katakana NO', hint: 'Pelafalan: suku kata no' },
+            // Baris H (5)
+            { char: 'ハ', romaji: 'ha', meaning: 'Katakana HA', hint: 'Pelafalan: suku kata ha' },
+            { char: 'ヒ', romaji: 'hi', meaning: 'Katakana HI', hint: 'Pelafalan: suku kata hi' },
+            { char: 'フ', romaji: 'fu', meaning: 'Katakana FU', hint: 'Pelafalan: suku kata fu' },
+            { char: 'ヘ', romaji: 'he', meaning: 'Katakana HE', hint: 'Pelafalan: suku kata he' },
+            { char: 'ホ', romaji: 'ho', meaning: 'Katakana HO', hint: 'Pelafalan: suku kata ho' },
+            // Baris M (5)
+            { char: 'マ', romaji: 'ma', meaning: 'Katakana MA', hint: 'Pelafalan: suku kata ma' },
+            { char: 'ミ', romaji: 'mi', meaning: 'Katakana MI', hint: 'Pelafalan: suku kata mi' },
+            { char: 'ム', romaji: 'mu', meaning: 'Katakana MU', hint: 'Pelafalan: suku kata mu' },
+            { char: 'メ', romaji: 'me', meaning: 'Katakana ME', hint: 'Pelafalan: suku kata me' },
+            { char: 'モ', romaji: 'mo', meaning: 'Katakana MO', hint: 'Pelafalan: suku kata mo' },
+            // Baris Y (3)
+            { char: 'ヤ', romaji: 'ya', meaning: 'Katakana YA', hint: 'Pelafalan: suku kata ya' },
+            { char: 'ユ', romaji: 'yu', meaning: 'Katakana YU', hint: 'Pelafalan: suku kata yu' },
+            { char: 'ヨ', romaji: 'yo', meaning: 'Katakana YO', hint: 'Pelafalan: suku kata yo' },
+            // Baris R (5)
+            { char: 'ラ', romaji: 'ra', meaning: 'Katakana RA', hint: 'Pelafalan: suku kata ra' },
+            { char: 'リ', romaji: 'ri', meaning: 'Katakana RI', hint: 'Pelafalan: suku kata ri' },
+            { char: 'ル', romaji: 'ru', meaning: 'Katakana RU', hint: 'Pelafalan: suku kata ru' },
+            { char: 'レ', romaji: 're', meaning: 'Katakana RE', hint: 'Pelafalan: suku kata re' },
+            { char: 'ロ', romaji: 'ro', meaning: 'Katakana RO', hint: 'Pelafalan: suku kata ro' },
+            // Baris W & N (3)
+            { char: 'ワ', romaji: 'wa', meaning: 'Katakana WA', hint: 'Pelafalan: suku kata wa' },
+            { char: 'ヲ', romaji: 'wo', meaning: 'Katakana WO', hint: 'Pelafalan: suku kata wo/o' },
+            { char: 'ン', romaji: 'n', meaning: 'Katakana N', hint: 'Pelafalan: konsonan n' }
+        ];
+
+        const VOCAB_DATA = [
+            { char: 'こんにちは', romaji: 'Konnichiwa', meaning: 'Halo / Selamat Siang', hint: 'Dibaca: kon-ni-chi-wa' },
+            { char: 'ありがとう', romaji: 'Arigatou', meaning: 'Terima Kasih', hint: 'Dibaca: a-ri-ga-to-u' },
+            { char: 'さようなら', romaji: 'Sayounara', meaning: 'Selamat Tinggal', hint: 'Dibaca: sa-yo-u-na-ra' },
+            { char: 'おはよう', romaji: 'Ohayou', meaning: 'Selamat Pagi', hint: 'Dibaca: o-ha-yo-u' },
+            { char: 'こんばんは', romaji: 'Konbanwa', meaning: 'Selamat Malam', hint: 'Dibaca: kon-ba-n-wa' },
+            { char: 'すみません', romaji: 'Sumimasen', meaning: 'Permisi / Maaf', hint: 'Dibaca: su-mi-ma-se-n' },
+            { char: 'はい', romaji: 'Hai', meaning: 'Ya', hint: 'Dibaca: ha-i' },
+            { char: 'いいえ', romaji: 'Iie', meaning: 'Tidak', hint: 'Dibaca: i-i-e' },
+            { char: 'ねこ', romaji: 'Neko', meaning: 'Kucing', hint: 'Dibaca: ne-ko' },
+            { char: 'いぬ', romaji: 'Inu', meaning: 'Anjing', hint: 'Dibaca: i-nu' },
+            { char: 'みず', romaji: 'Mizu', meaning: 'Air', hint: 'Dibaca: mi-zu' },
+            { char: 'たべもの', romaji: 'Tabemono', meaning: 'Makanan', hint: 'Dibaca: ta-be-mo-no' },
+            { char: 'ともだち', romaji: 'Tomodachi', meaning: 'Teman', hint: 'Dibaca: to-mo-da-chi' },
+            { char: 'せんせい', romaji: 'Sensei', meaning: 'Guru', hint: 'Dibaca: se-n-se-i' },
+            { char: 'がくせい', romaji: 'Gakusei', meaning: 'Siswa / Murid', hint: 'Dibaca: ga-ku-se-i' }
+        ];
+
+        /* --- STATE VARIABLES --- */
+        let currentMode = 'hiragana';
+        let mainTabMode = 'study'; // 'study' or 'quiz'
+        let currentQuestions = [];
+        let currentIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let maxStreak = 0;
+        let correctAnswersCount = 0;
+        let answerSubmitted = false;
+        const totalQuestions = 10;
+
+        // Study Mode State
+        let studyDataset = [];
+        let studyIndex = 0;
+
+        // Audio Context for sound effects
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                if (type === 'correct') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.25);
+                } else if (type === 'incorrect') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
+                    osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.12); // E3
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                }
+            } catch (e) {
+                console.log('Web Audio API sound error:', e);
+            }
+        }
+
+        // Japanese Text-to-Speech Synthesis
+        function speakJapaneseText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.8;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        /* --- NAVIGATION & TAB SWITCHING --- */
+        function switchMainTab(mode) {
+            mainTabMode = mode;
+            const studyBtn = document.getElementById('tab-study-mode');
+            const quizBtn = document.getElementById('tab-quiz-mode');
+            const studyActions = document.querySelectorAll('.btn-action-study');
+            const quizActions = document.querySelectorAll('.btn-action-quiz');
+            const tipText = document.getElementById('mode-tip-text');
+
+            if (mode === 'study') {
+                studyBtn.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 transition-all";
+                quizBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all text-slate-600";
+                studyActions.forEach(btn => btn.classList.remove('hidden'));
+                quizActions.forEach(btn => btn.classList.add('hidden'));
+                tipText.innerHTML = '<i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Mode Belajar: Ketuk kartu untuk membalik & dengarkan suara pelafalannya!';
+            } else {
+                quizBtn.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 transition-all";
+                studyBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all text-slate-600";
+                studyActions.forEach(btn => btn.classList.add('hidden'));
+                quizActions.forEach(btn => btn.classList.remove('hidden'));
+                tipText.innerHTML = '<i class="fa-solid fa-gamepad text-indigo-500 mr-1"></i> Mode Kuis: Jawab 10 soal acak dan dapatkan skor terbanyak!';
+            }
+        }
+
+        function selectCategory(category, type) {
+            currentMode = category;
+            if (type === 'study') {
+                startStudyMode(category);
+            } else {
+                startGame(category);
+            }
+        }
+
+        /* --- STUDY MODE (FLASHCARD) LOGIC --- */
+        function startStudyMode(category) {
+            currentMode = category;
+            studyIndex = 0;
+
+            if (category === 'hiragana') studyDataset = HIRAGANA_DATA;
+            else if (category === 'katakana') studyDataset = KATAKANA_DATA;
+            else if (category === 'vocab') studyDataset = VOCAB_DATA;
+
+            const titleMap = { hiragana: 'Hiragana (46 Aksara)', katakana: 'Katakana (46 Aksara)', vocab: 'Kosakata Dasar' };
+            document.getElementById('study-title-badge').innerText = titleMap[category] || category;
+
+            document.getElementById('mode-selection-screen').classList.add('hidden');
+            document.getElementById('study-screen').classList.remove('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+
+            renderStudyGridOverview();
+            renderStudyCard();
+        }
+
+        function renderStudyCard() {
+            const cardElem = document.getElementById('flashcard-element');
+            cardElem.classList.remove('flipped');
+
+            const item = studyDataset[studyIndex];
+            document.getElementById('study-counter').innerText = `${studyIndex + 1} / ${studyDataset.length}`;
+            document.getElementById('study-char-front').innerText = item.char;
+            document.getElementById('study-romaji-front').innerText = item.romaji;
+            document.getElementById('study-romaji-back').innerText = item.romaji;
+            document.getElementById('study-meaning-back').innerText = item.meaning;
+            document.getElementById('study-hint-back').innerText = item.hint || '';
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard-element').classList.toggle('flipped');
+        }
+
+        function prevStudyCard() {
+            if (studyIndex > 0) {
+                studyIndex--;
+            } else {
+                studyIndex = studyDataset.length - 1;
+            }
+            renderStudyCard();
+        }
+
+        function nextStudyCard() {
+            if (studyIndex < studyDataset.length - 1) {
+                studyIndex++;
+            } else {
+                studyIndex = 0;
+            }
+            renderStudyCard();
+        }
+
+        function speakCurrent(event) {
+            if (event) event.stopPropagation();
+            const item = studyDataset[studyIndex];
+            speakJapaneseText(item.char);
+        }
+
+        function toggleGridOverview() {
+            const container = document.getElementById('grid-overview-container');
+            container.classList.toggle('hidden');
+        }
+
+        function renderStudyGridOverview() {
+            const gridContainer = document.getElementById('grid-overview-items');
+            gridContainer.innerHTML = '';
+            studyDataset.forEach((item, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'p-2 bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-600 rounded-lg text-center transition-all font-bold text-xs japanese-font';
+                btn.innerText = item.char;
+                btn.onclick = () => {
+                    studyIndex = idx;
+                    renderStudyCard();
+                    document.getElementById('grid-overview-container').classList.add('hidden');
+                };
+                gridContainer.appendChild(btn);
+            });
+        }
+
+        function startQuizFromStudy() {
+            startGame(currentMode);
+        }
+
+        /* --- GAME ENGINE FUNCTIONS (QUIZ SHUFFLE & RESET) --- */
+        function startGame(mode) {
+            currentMode = mode;
+            score = 0;
+            streak = 0;
+            maxStreak = 0;
+            currentIndex = 0;
+            correctAnswersCount = 0;
+
+            // Pick Dataset
+            let dataset = [];
+            if (mode === 'hiragana') dataset = [...HIRAGANA_DATA];
+            else if (mode === 'katakana') dataset = [...KATAKANA_DATA];
+            else if (mode === 'vocab') dataset = [...VOCAB_DATA];
+
+            // Fisher-Yates Shuffle Algorithm (Mengacak Soal Secara Dinamis Setiap Kali Reset/Mulai Baru)
+            for (let i = dataset.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [dataset[i], dataset[j]] = [dataset[j], dataset[i]];
+            }
+            
+            // Ambil 10 soal acak dari database
+            currentQuestions = dataset.slice(0, totalQuestions);
+
+            // Screen Switch
+            document.getElementById('mode-selection-screen').classList.add('hidden');
+            document.getElementById('study-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.remove('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            answerSubmitted = false;
+            const qData = currentQuestions[currentIndex];
+
+            // UI Elements Update
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('streak-val').innerText = streak;
+            document.getElementById('question-index').innerText = `Soal ${currentIndex + 1}/${totalQuestions}`;
+            document.getElementById('progress-bar').style.width = `${((currentIndex) / totalQuestions) * 100}%`;
+
+            document.getElementById('question-char').innerText = qData.char;
+            document.getElementById('feedback-banner').classList.add('hidden');
+
+            // Automatically speak character in quiz mode for audio reinforcement
+            speakJapaneseText(qData.char);
+
+            // Prompt Adjustments
+            if (currentMode === 'vocab') {
+                document.getElementById('question-prompt').innerText = 'Apa arti kata bahasa Jepang di atas?';
+            } else {
+                document.getElementById('question-prompt').innerText = 'Pilih Romaji yang tepat untuk karakter ini:';
+            }
+
+            // Generate Options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+
+            const options = generateOptions(qData);
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn bg-white hover:bg-slate-50 border border-slate-200 hover:border-indigo-300 text-slate-700 font-semibold p-4 rounded-xl shadow-sm text-center flex flex-col items-center justify-center min-h-[70px]';
+                
+                if (currentMode === 'vocab') {
+                    btn.innerHTML = `<span class="text-sm">${opt.meaning}</span><span class="text-[10px] text-slate-400 font-normal">(${opt.romaji})</span>`;
+                } else {
+                    btn.innerHTML = `<span class="text-base font-bold">${opt.romaji}</span>`;
+                }
+
+                btn.onclick = () => checkAnswer(opt, qData, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function generateOptions(correctItem) {
+            let fullList = [];
+            if (currentMode === 'hiragana') fullList = HIRAGANA_DATA;
+            else if (currentMode === 'katakana') fullList = KATAKANA_DATA;
+            else if (currentMode === 'vocab') fullList = VOCAB_DATA;
+
+            // Filter out correct answer to get distractors
+            const distractors = fullList.filter(item => item.romaji !== correctItem.romaji)
+                                         .sort(() => Math.random() - 0.5)
+                                         .slice(0, 3);
+
+            const options = [correctItem, ...distractors];
+            return options.sort(() => Math.random() - 0.5);
+        }
+
+        function checkAnswer(selectedOpt, correctItem, clickedBtn) {
+            if (answerSubmitted) return;
+            answerSubmitted = true;
+
+            const isCorrect = selectedOpt.romaji === correctItem.romaji;
+            const optionsBtns = document.getElementById('options-container').children;
+            const questionCard = document.getElementById('question-card');
+
+            // Disable all option buttons
+            Array.from(optionsBtns).forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:bg-slate-50', 'hover:border-indigo-300');
+            });
+
+            if (isCorrect) {
+                playSound('correct');
+                score += 10 + (streak * 2); // Streak Bonus
+                streak++;
+                if (streak > maxStreak) maxStreak = streak;
+                correctAnswersCount++;
+
+                clickedBtn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+                clickedBtn.classList.remove('bg-white', 'text-slate-700');
+                questionCard.classList.add('animate-correct');
+                setTimeout(() => questionCard.classList.remove('animate-correct'), 400);
+
+                showFeedback(true, correctItem);
+            } else {
+                playSound('incorrect');
+                streak = 0;
+
+                clickedBtn.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
+                clickedBtn.classList.remove('bg-white', 'text-slate-700');
+                questionCard.classList.add('animate-shake');
+                setTimeout(() => questionCard.classList.remove('animate-shake'), 500);
+
+                // Highlight correct answer button
+                Array.from(optionsBtns).forEach(btn => {
+                    if (btn.innerText.includes(correctItem.romaji) || btn.innerText.includes(correctItem.meaning)) {
+                        btn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                    }
+                });
+
+                showFeedback(false, correctItem);
+            }
+
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('streak-val').innerText = streak;
+        }
+
+        function showFeedback(isCorrect, correctItem) {
+            const banner = document.getElementById('feedback-banner');
+            const title = document.getElementById('feedback-title');
+            const detail = document.getElementById('feedback-detail');
+
+            banner.classList.remove('hidden', 'bg-emerald-50', 'bg-rose-50', 'text-emerald-800', 'text-rose-800', 'border-emerald-200', 'border-rose-200');
+
+            if (isCorrect) {
+                banner.classList.add('bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200');
+                title.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i> Jawaban Benar! (+${10 + ((streak - 1) * 2)})`;
+            } else {
+                banner.classList.add('bg-rose-50', 'text-rose-800', 'border', 'border-rose-200');
+                title.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i> Kurang Tepat!`;
+            }
+
+            detail.innerHTML = `
+                <p><strong>Karakter:</strong> ${correctItem.char} &nbsp;|&nbsp; <strong>Romaji:</strong> ${correctItem.romaji}</p>
+                <p class="text-slate-500"><strong>Arti/Info:</strong> ${correctItem.meaning}</p>
+            `;
+
+            // Adjust next button label if end of game
+            if (currentIndex === totalQuestions - 1) {
+                document.getElementById('next-btn').innerHTML = 'Lihat Hasil Akhir <i class="fa-solid fa-trophy ml-1"></i>';
+            } else {
+                document.getElementById('next-btn').innerHTML = 'Lanjut Soal Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>';
+            }
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            if (currentIndex < totalQuestions) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.remove('hidden');
+
+            const accuracy = Math.round((correctAnswersCount / totalQuestions) * 100);
+
+            document.getElementById('final-score').innerText = score;
+            document.getElementById('final-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('final-streak').innerText = maxStreak;
+
+            const badgeElem = document.getElementById('result-badge');
+            const subtitleElem = document.getElementById('result-subtitle');
+
+            if (accuracy >= 80) {
+                badgeElem.className = "w-20 h-20 mx-auto rounded-full bg-emerald-100 text-emerald-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
+                badgeElem.innerHTML = '<i class="fa-solid fa-crown"></i>';
+                subtitleElem.innerText = 'Luar Biasa! Kamu sangat menguasai materi ini!';
+            } else if (accuracy >= 50) {
+                badgeElem.className = "w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
+                badgeElem.innerHTML = '<i class="fa-solid fa-star"></i>';
+                subtitleElem.innerText = 'Bagus! Tingkatkan lagi latihanmu agar makin lancar!';
+            } else {
+                badgeElem.className = "w-20 h-20 mx-auto rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
+                badgeElem.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>';
+                subtitleElem.innerText = 'Jangan menyerah! Ayo coba lagi dan perbaiki skor!';
+            }
+        }
+
+        function restartCurrentGame() {
+            startGame(currentMode);
+        }
+
+        function backToMenu() {
+            document.getElementById('mode-selection-screen').classList.remove('hidden');
+            document.getElementById('study-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+        }
+
+        /* --- CUSTOM EXIT CONFIRMATION MODAL --- */
+        function showCustomConfirm() {
+            document.getElementById('custom-confirm-modal').classList.remove('hidden');
+        }
+
+        function hideCustomConfirm() {
+            document.getElementById('custom-confirm-modal').classList.add('hidden');
+        }
+
+        function confirmExit() {
+            hideCustomConfirm();
+            backToMenu();
+        }
+    </script>
+</body>
+</html>
