@@ -779,6 +779,9 @@
                 document.getElementById('study-hint-back').textContent = item.hint || '';
                 document.getElementById('study-counter').textContent = `${studyIndex + 1} / ${dataset.length}`;
             }, 150);
+
+            // Re-render grid overview so active selection (blue highlight) syncs dynamically
+            renderGridOverview();
         }
 
         function flipCard() {
@@ -816,20 +819,24 @@
 
         function renderGridOverview() {
             const gridItems = document.getElementById('grid-overview-items');
+            if (!gridItems) return;
             gridItems.innerHTML = '';
             dataset.forEach((item, index) => {
                 const btn = document.createElement('button');
-                btn.className = `p-1.5 rounded-lg border text-xs font-bold transition-all japanese-font ${
-                    index === studyIndex 
-                        ? 'bg-indigo-600 text-white border-indigo-600' 
+                const isSelected = (index === studyIndex);
+                btn.className = `p-1.5 rounded-xl border flex flex-col items-center justify-center transition-all ${
+                    isSelected 
+                        ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm scale-105 z-10' 
                         : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                 }`;
-                btn.textContent = item.char;
+                btn.innerHTML = `
+                    <span class="japanese-font text-sm font-bold leading-tight">${item.char}</span>
+                    <span class="text-[9px] ${isSelected ? 'text-indigo-100 font-semibold' : 'text-slate-400'} leading-none mt-0.5">${item.romaji}</span>
+                `;
                 btn.onclick = (e) => {
                     e.stopPropagation();
                     studyIndex = index;
                     updateStudyCard();
-                    renderGridOverview();
                 };
                 gridItems.appendChild(btn);
             });
