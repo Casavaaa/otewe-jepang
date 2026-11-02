@@ -299,7 +299,19 @@
                 <!-- QUESTION DISPLAY AREA -->
                 <div id="question-card" class="bg-white/90 rounded-2xl p-6 sm:p-8 text-center border border-slate-100 shadow-sm relative transition-all duration-200">
                     <span id="question-index" class="absolute top-3 left-4 text-xs font-bold text-slate-400">Soal 1/10</span>
-                    <div id="question-char" class="japanese-font text-5xl sm:text-6xl font-extrabold text-slate-800 my-4 tracking-wide">
+                    
+                    <!-- Sound Replay Button -->
+                    <button onclick="repeatQuestionAudio()" class="absolute top-3 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-indigo-100 text-slate-500 hover:text-indigo-600 flex items-center justify-center transition-all shadow-sm" title="Dengar Suara Lagi">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+
+                    <!-- Pronunciation / Romaji display above the main character -->
+                    <div id="question-pronunciation-badge" class="mt-2 inline-block bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+                        <span class="text-xs text-slate-400 font-semibold mr-1">Cara Baca:</span>
+                        <span id="question-romaji" class="text-xs font-bold text-indigo-600"></span>
+                    </div>
+
+                    <div id="question-char" class="japanese-font text-5xl sm:text-6xl font-extrabold text-slate-800 my-3 tracking-wide">
                         あ
                     </div>
                     <p id="question-prompt" class="text-xs text-slate-500 font-medium">Pilih Romaji / Arti yang benar:</p>
@@ -507,6 +519,7 @@
         ];
 
         const VOCAB_DATA = [
+            // Salam & Ungkapan Sehari-hari
             { char: 'こんにちは', romaji: 'Konnichiwa', meaning: 'Halo / Selamat Siang', hint: 'Dibaca: kon-ni-chi-wa' },
             { char: 'ありがとう', romaji: 'Arigatou', meaning: 'Terima Kasih', hint: 'Dibaca: a-ri-ga-to-u' },
             { char: 'さようなら', romaji: 'Sayounara', meaning: 'Selamat Tinggal', hint: 'Dibaca: sa-yo-u-na-ra' },
@@ -515,80 +528,96 @@
             { char: 'すみません', romaji: 'Sumimasen', meaning: 'Permisi / Maaf', hint: 'Dibaca: su-mi-ma-se-n' },
             { char: 'はい', romaji: 'Hai', meaning: 'Ya', hint: 'Dibaca: ha-i' },
             { char: 'いいえ', romaji: 'Iie', meaning: 'Tidak', hint: 'Dibaca: i-i-e' },
+            { char: 'おねがいします', romaji: 'Onegaishimasu', meaning: 'Minta Tolong / Silakan', hint: 'Dibaca: o-ne-ga-i-shi-ma-su' },
+            { char: 'ごめんなさい', romaji: 'Gomennasai', meaning: 'Mohon Maaf', hint: 'Dibaca: go-me-n-na-sa-i' },
+            
+            // Hewan & Alam
             { char: 'ねこ', romaji: 'Neko', meaning: 'Kucing', hint: 'Dibaca: ne-ko' },
             { char: 'いぬ', romaji: 'Inu', meaning: 'Anjing', hint: 'Dibaca: i-nu' },
+            { char: 'とり', romaji: 'Tori', meaning: 'Burung', hint: 'Dibaca: to-ri' },
+            { char: 'さかな', romaji: 'Sakana', meaning: 'Ikan', hint: 'Dibaca: sa-ka-na' },
+            { char: 'やま', romaji: 'Yama', meaning: 'Gunung', hint: 'Dibaca: ya-ma' },
+            { char: '川 (かわ)', romaji: 'Kawa', meaning: 'Sungai', hint: 'Dibaca: ka-wa' },
+            { char: '空 (そら)', romaji: 'Sora', meaning: 'Langit', hint: 'Dibaca: so-ra' },
+            { char: '雨 (あめ)', romaji: 'Ame', meaning: 'Hujan', hint: 'Dibaca: a-me' },
+            { char: '花 (はな)', romaji: 'Hana', meaning: 'Bunga', hint: 'Dibaca: ha-na' },
+            
+            // Makanan & Minuman
             { char: 'みず', romaji: 'Mizu', meaning: 'Air', hint: 'Dibaca: mi-zu' },
             { char: 'たべもの', romaji: 'Tabemono', meaning: 'Makanan', hint: 'Dibaca: ta-be-mo-no' },
+            { char: '飲みもの (のみもの)', romaji: 'Nomimono', meaning: 'Minuman', hint: 'Dibaca: no-mi-mo-no' },
+            { char: 'お茶 (おちゃ)', romaji: 'Ocha', meaning: 'Teh Hijau', hint: 'Dibaca: o-cha' },
+            { char: 'ご飯 (ごはん)', romaji: 'Gohan', meaning: 'Nasi / Makan', hint: 'Dibaca: go-ha-n' },
+            { char: '肉 (にく)', romaji: 'Niku', meaning: 'Daging', hint: 'Dibaca: ni-ku' },
+            { char: '野菜 (やさい)', romaji: 'Yasai', meaning: 'Sayuran', hint: 'Dibaca: ya-sa-i' },
+            { char: '果物 (くだもの)', romaji: 'Kudamono', meaning: 'Buah-buahan', hint: 'Dibaca: ku-da-mo-no' },
+
+            // Manusia & Hubungan
             { char: 'ともだち', romaji: 'Tomodachi', meaning: 'Teman', hint: 'Dibaca: to-mo-da-chi' },
             { char: 'せんせい', romaji: 'Sensei', meaning: 'Guru', hint: 'Dibaca: se-n-se-i' },
-            { char: 'がくせい', romaji: 'Gakusei', meaning: 'Siswa / Murid', hint: 'Dibaca: ga-ku-se-i' }
+            { char: 'がくせい', romaji: 'Gakusei', meaning: 'Siswa / Murid', hint: 'Dibaca: ga-ku-se-i' },
+            { char: '人 (ひと)', romaji: 'Hito', meaning: 'Orang', hint: 'Dibaca: hi-to' },
+            { char: '家族 (かぞく)', romaji: 'Kazoku', meaning: 'Keluarga', hint: 'Dibaca: ka-zo-ku' },
+            { char: '父 (ちち)', romaji: 'Chichi', meaning: 'Ayah (Sendiri)', hint: 'Dibaca: chi-chi' },
+            { char: '母 (はは)', romaji: 'Haha', meaning: 'Ibu (Sendiri)', hint: 'Dibaca: ha-ha' },
+
+            // Benda Sehari-hari & Tempat
+            { char: '本 (ほん)', romaji: 'Hon', meaning: 'Buku', hint: 'Dibaca: ho-n' },
+            { char: '車 (くるま)', romaji: 'Kuruma', meaning: 'Mobil', hint: 'Dibaca: ku-ru-ma' },
+            { char: '家 (いえ)', romaji: 'Ie', meaning: 'Rumah', hint: 'Dibaca: i-e' },
+            { char: '学校 (がっこう)', romaji: 'Gakkou', meaning: 'Sekolah', hint: 'Dibaca: gak-ko-u' },
+            { char: '部屋 (へや)', romaji: 'Heya', meaning: 'Kamar / Ruangan', hint: 'Dibaca: he-ya' },
+            { char: 'お金 (おかね)', romaji: 'Okane', meaning: 'Uang', hint: 'Dibaca: o-ka-ne' },
+            { char: '時計 (とけい)', romaji: 'Tokei', meaning: 'Jam', hint: 'Dibaca: to-ke-i' },
+            { char: '電話 (でんわ)', romaji: 'Denwa', meaning: 'Telepon', hint: 'Dibaca: de-n-wa' },
+
+            // Kata Sifat Dasar
+            { char: '大きい (おおきい)', romaji: 'Ookii', meaning: 'Besar', hint: 'Dibaca: o-o-ki-i' },
+            { char: '小さい (ちいさい)', romaji: 'Chiisai', meaning: 'Kecil', hint: 'Dibaca: chi-i-sa-i' },
+            { char: 'いい / 良い (よい)', romaji: 'Ii / Yoi', meaning: 'Bagus / Baik', hint: 'Dibaca: i-i' },
+            { char: '悪い (わるい)', romaji: 'Warui', meaning: 'Buruk / Jelek', hint: 'Dibaca: wa-ru-i' },
+            { char: '楽しい (たのしい)', romaji: 'Tanoshii', meaning: 'Menyenangkan', hint: 'Dibaca: ta-no-shi-i' },
+            { char: '美味しい (おいしい)', romaji: 'Oishii', meaning: 'Enak / Lezat', hint: 'Dibaca: o-i-shi-i' },
+            { char: '熱い (あつい)', romaji: 'Atsui', meaning: 'Panas', hint: 'Dibaca: a-tsu-i' },
+            { char: '寒い (さむい)', romaji: 'Samui', meaning: 'Dingin (Cuaca)', hint: 'Dibaca: sa-mu-i' },
+
+            // Kata Kerja Dasar
+            { char: '行く (いく)', romaji: 'Iku', meaning: 'Pergi', hint: 'Dibaca: i-ku' },
+            { char: '来る (くる)', romaji: 'Kuru', meaning: 'Datang', hint: 'Dibaca: ku-ru' },
+            { char: '食べる (たべる)', romaji: 'Taberu', meaning: 'Makan', hint: 'Dibaca: ta-be-ru' },
+            { char: '飲む (のむ)', romaji: 'Nomu', meaning: 'Minum', hint: 'Dibaca: no-mu' },
+            { char: '見る (みる)', romaji: 'Miru', meaning: 'Melihat', hint: 'Dibaca: mi-ru' },
+            { char: '聞く (きく)', romaji: 'Kiku', meaning: 'Mendengar / Bertanya', hint: 'Dibaca: ki-ku' },
+            { char: '話す (はなす)', romaji: 'Hanasu', meaning: 'Berbicara', hint: 'Dibaca: ha-na-su' },
+            { char: '買う (かう)', romaji: 'Kau', meaning: 'Membeli', hint: 'Dibaca: ka-u' }
         ];
 
         /* --- STATE VARIABLES --- */
-        let currentMode = 'hiragana';
-        let mainTabMode = 'study'; // 'study' or 'quiz'
-        let currentQuestions = [];
-        let currentIndex = 0;
+        let currentMode = 'study'; // 'study' or 'quiz'
+        let currentCategory = 'hiragana'; // 'hiragana', 'katakana', 'vocab'
+        let dataset = HIRAGANA_DATA;
+        
+        // Study state
+        let studyIndex = 0;
+        let isCardFlipped = false;
+
+        // Quiz state
+        let quizQueue = [];
+        let currentQuizIndex = 0;
         let score = 0;
         let streak = 0;
         let maxStreak = 0;
-        let correctAnswersCount = 0;
-        let answerSubmitted = false;
-        const totalQuestions = 10;
+        let totalQuestions = 10;
+        let isAnswered = false;
 
-        // Study Mode State
-        let studyDataset = [];
-        let studyIndex = 0;
+        /* --- INITIALIZATION --- */
+        window.onload = function() {
+            switchMainTab('study');
+        };
 
-        // Audio Context for sound effects
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-        function playSound(type) {
-            try {
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-
-                if (type === 'correct') {
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
-                    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15); // A5
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.25);
-                } else if (type === 'incorrect') {
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(220, audioCtx.currentTime); // A3
-                    osc.frequency.setValueAtTime(164.81, audioCtx.currentTime + 0.12); // E3
-                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
-                    osc.start();
-                    osc.stop(audioCtx.currentTime + 0.3);
-                }
-            } catch (e) {
-                console.log('Web Audio API sound error:', e);
-            }
-        }
-
-        // Japanese Text-to-Speech Synthesis
-        function speakJapaneseText(text) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'ja-JP';
-                utterance.rate = 0.8;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
-        /* --- NAVIGATION & TAB SWITCHING --- */
+        /* --- NAVIGATION & TAB LOGIC --- */
         function switchMainTab(mode) {
-            mainTabMode = mode;
+            currentMode = mode;
             const studyBtn = document.getElementById('tab-study-mode');
             const quizBtn = document.getElementById('tab-quiz-mode');
             const studyActions = document.querySelectorAll('.btn-action-study');
@@ -596,89 +625,102 @@
             const tipText = document.getElementById('mode-tip-text');
 
             if (mode === 'study') {
-                studyBtn.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 transition-all";
-                quizBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all text-slate-600";
-                studyActions.forEach(btn => btn.classList.remove('hidden'));
-                quizActions.forEach(btn => btn.classList.add('hidden'));
+                studyBtn.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 font-bold transition-all";
+                quizBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all font-bold";
+                studyActions.forEach(el => el.classList.remove('hidden'));
+                quizActions.forEach(el => el.classList.add('hidden'));
                 tipText.innerHTML = '<i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Mode Belajar: Ketuk kartu untuk membalik & dengarkan suara pelafalannya!';
             } else {
-                quizBtn.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 transition-all";
-                studyBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all text-slate-600";
-                studyActions.forEach(btn => btn.classList.add('hidden'));
-                quizActions.forEach(btn => btn.classList.remove('hidden'));
-                tipText.innerHTML = '<i class="fa-solid fa-gamepad text-indigo-500 mr-1"></i> Mode Kuis: Jawab 10 soal acak dan dapatkan skor terbanyak!';
+                quizBtn.className = "flex-1 py-2 rounded-lg bg-white shadow-sm text-indigo-600 font-bold transition-all";
+                studyBtn.className = "flex-1 py-2 rounded-lg hover:text-indigo-600 transition-all font-bold";
+                quizActions.forEach(el => el.classList.remove('hidden'));
+                studyActions.forEach(el => el.classList.add('hidden'));
+                tipText.innerHTML = '<i class="fa-solid fa-gamepad text-indigo-500 mr-1"></i> Mode Kuis: Tes ingatanmu dengan 10 soal acak!';
             }
         }
 
-        function selectCategory(category, type) {
-            currentMode = category;
-            if (type === 'study') {
-                startStudyMode(category);
-            } else {
-                startGame(category);
-            }
-        }
-
-        /* --- STUDY MODE (FLASHCARD) LOGIC --- */
-        function startStudyMode(category) {
-            currentMode = category;
-            studyIndex = 0;
-
-            if (category === 'hiragana') studyDataset = HIRAGANA_DATA;
-            else if (category === 'katakana') studyDataset = KATAKANA_DATA;
-            else if (category === 'vocab') studyDataset = VOCAB_DATA;
-
-            const titleMap = { hiragana: 'Hiragana (46 Aksara)', katakana: 'Katakana (46 Aksara)', vocab: 'Kosakata Dasar' };
-            document.getElementById('study-title-badge').innerText = titleMap[category] || category;
+        function selectCategory(category, mode) {
+            currentCategory = category;
+            if (category === 'hiragana') dataset = HIRAGANA_DATA;
+            else if (category === 'katakana') dataset = KATAKANA_DATA;
+            else if (category === 'vocab') dataset = VOCAB_DATA;
 
             document.getElementById('mode-selection-screen').classList.add('hidden');
-            document.getElementById('study-screen').classList.remove('hidden');
-            document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.add('hidden');
 
-            renderStudyGridOverview();
-            renderStudyCard();
+            if (mode === 'study') {
+                startStudyMode();
+            } else {
+                startQuizMode();
+            }
         }
 
-        function renderStudyCard() {
-            const cardElem = document.getElementById('flashcard-element');
-            cardElem.classList.remove('flipped');
+        function backToMenu() {
+            document.getElementById('study-screen').classList.add('hidden');
+            document.getElementById('quiz-screen').classList.add('hidden');
+            document.getElementById('result-screen').classList.add('hidden');
+            document.getElementById('mode-selection-screen').classList.remove('hidden');
+        }
 
-            const item = studyDataset[studyIndex];
-            document.getElementById('study-counter').innerText = `${studyIndex + 1} / ${studyDataset.length}`;
-            document.getElementById('study-char-front').innerText = item.char;
-            document.getElementById('study-romaji-front').innerText = item.romaji;
-            document.getElementById('study-romaji-back').innerText = item.romaji;
-            document.getElementById('study-meaning-back').innerText = item.meaning;
-            document.getElementById('study-hint-back').innerText = item.hint || '';
+        /* --- MODE BELAJAR (FLASHCARD) LOGIC --- */
+        function startStudyMode() {
+            studyIndex = 0;
+            isCardFlipped = false;
+            document.getElementById('flashcard-element').classList.remove('flipped');
+            document.getElementById('study-screen').classList.remove('hidden');
+            
+            // Set badge title
+            const titleBadge = document.getElementById('study-title-badge');
+            if (currentCategory === 'hiragana') titleBadge.textContent = 'Hiragana (46)';
+            else if (currentCategory === 'katakana') titleBadge.textContent = 'Katakana (46)';
+            else titleBadge.textContent = 'Kosakata (50+)';
+
+            updateStudyCard();
+            renderGridOverview();
+        }
+
+        function updateStudyCard() {
+            const item = dataset[studyIndex];
+            
+            // Reset card rotation
+            isCardFlipped = false;
+            document.getElementById('flashcard-element').classList.remove('flipped');
+
+            setTimeout(() => {
+                document.getElementById('study-char-front').textContent = item.char;
+                document.getElementById('study-romaji-front').textContent = item.romaji;
+                document.getElementById('study-romaji-back').textContent = item.romaji;
+                document.getElementById('study-meaning-back').textContent = item.meaning;
+                document.getElementById('study-hint-back').textContent = item.hint || '';
+                document.getElementById('study-counter').textContent = `${studyIndex + 1} / ${dataset.length}`;
+            }, 150);
         }
 
         function flipCard() {
-            document.getElementById('flashcard-element').classList.toggle('flipped');
+            isCardFlipped = !isCardFlipped;
+            const flashcard = document.getElementById('flashcard-element');
+            if (isCardFlipped) {
+                flashcard.classList.add('flipped');
+            } else {
+                flashcard.classList.remove('flipped');
+            }
         }
 
         function prevStudyCard() {
             if (studyIndex > 0) {
                 studyIndex--;
             } else {
-                studyIndex = studyDataset.length - 1;
+                studyIndex = dataset.length - 1; // loop around
             }
-            renderStudyCard();
+            updateStudyCard();
         }
 
         function nextStudyCard() {
-            if (studyIndex < studyDataset.length - 1) {
+            if (studyIndex < dataset.length - 1) {
                 studyIndex++;
             } else {
-                studyIndex = 0;
+                studyIndex = 0; // loop around
             }
-            renderStudyCard();
-        }
-
-        function speakCurrent(event) {
-            if (event) event.stopPropagation();
-            const item = studyDataset[studyIndex];
-            speakJapaneseText(item.char);
+            updateStudyCard();
         }
 
         function toggleGridOverview() {
@@ -686,198 +728,184 @@
             container.classList.toggle('hidden');
         }
 
-        function renderStudyGridOverview() {
-            const gridContainer = document.getElementById('grid-overview-items');
-            gridContainer.innerHTML = '';
-            studyDataset.forEach((item, idx) => {
+        function renderGridOverview() {
+            const gridItems = document.getElementById('grid-overview-items');
+            gridItems.innerHTML = '';
+            dataset.forEach((item, index) => {
                 const btn = document.createElement('button');
-                btn.className = 'p-2 bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-600 rounded-lg text-center transition-all font-bold text-xs japanese-font';
-                btn.innerText = item.char;
-                btn.onclick = () => {
-                    studyIndex = idx;
-                    renderStudyCard();
-                    document.getElementById('grid-overview-container').classList.add('hidden');
+                btn.className = `p-1.5 rounded-lg border text-xs font-bold transition-all japanese-font ${
+                    index === studyIndex 
+                        ? 'bg-indigo-600 text-white border-indigo-600' 
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
+                }`;
+                btn.textContent = item.char;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    studyIndex = index;
+                    updateStudyCard();
+                    renderGridOverview();
                 };
-                gridContainer.appendChild(btn);
+                gridItems.appendChild(btn);
             });
         }
 
         function startQuizFromStudy() {
-            startGame(currentMode);
+            document.getElementById('study-screen').classList.add('hidden');
+            startQuizMode();
         }
 
-        /* --- GAME ENGINE FUNCTIONS (QUIZ SHUFFLE & RESET) --- */
-        function startGame(mode) {
-            currentMode = mode;
+        /* --- MODE KUIS LOGIC --- */
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function startQuizMode() {
+            // Shuffle dataset & select 10 questions
+            const shuffled = shuffleArray(dataset);
+            quizQueue = shuffled.slice(0, Math.min(totalQuestions, shuffled.length));
+            
+            currentQuizIndex = 0;
             score = 0;
             streak = 0;
             maxStreak = 0;
-            currentIndex = 0;
-            correctAnswersCount = 0;
-
-            // Pick Dataset
-            let dataset = [];
-            if (mode === 'hiragana') dataset = [...HIRAGANA_DATA];
-            else if (mode === 'katakana') dataset = [...KATAKANA_DATA];
-            else if (mode === 'vocab') dataset = [...VOCAB_DATA];
-
-            // Fisher-Yates Shuffle Algorithm (Mengacak Soal Secara Dinamis Setiap Kali Reset/Mulai Baru)
-            for (let i = dataset.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [dataset[i], dataset[j]] = [dataset[j], dataset[i]];
-            }
             
-            // Ambil 10 soal acak dari database
-            currentQuestions = dataset.slice(0, totalQuestions);
-
-            // Screen Switch
-            document.getElementById('mode-selection-screen').classList.add('hidden');
-            document.getElementById('study-screen').classList.add('hidden');
+            document.getElementById('score-val').textContent = score;
+            document.getElementById('streak-val').textContent = streak;
             document.getElementById('quiz-screen').classList.remove('hidden');
-            document.getElementById('result-screen').classList.add('hidden');
-
+            
             renderQuestion();
         }
 
         function renderQuestion() {
-            answerSubmitted = false;
-            const qData = currentQuestions[currentIndex];
-
-            // UI Elements Update
-            document.getElementById('score-val').innerText = score;
-            document.getElementById('streak-val').innerText = streak;
-            document.getElementById('question-index').innerText = `Soal ${currentIndex + 1}/${totalQuestions}`;
-            document.getElementById('progress-bar').style.width = `${((currentIndex) / totalQuestions) * 100}%`;
-
-            document.getElementById('question-char').innerText = qData.char;
+            isAnswered = false;
             document.getElementById('feedback-banner').classList.add('hidden');
-
-            // Automatically speak character in quiz mode for audio reinforcement
-            speakJapaneseText(qData.char);
-
-            // Prompt Adjustments
-            if (currentMode === 'vocab') {
-                document.getElementById('question-prompt').innerText = 'Apa arti kata bahasa Jepang di atas?';
+            
+            const currentItem = quizQueue[currentQuizIndex];
+            
+            // Progress Bar & Counter
+            const progressPercent = ((currentQuizIndex) / quizQueue.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('question-index').textContent = `Soal ${currentQuizIndex + 1}/${quizQueue.length}`;
+            
+            // Display main character
+            document.getElementById('question-char').textContent = currentItem.char;
+            
+            // Pronunciation badge display condition
+            const pronBadge = document.getElementById('question-pronunciation-badge');
+            if (currentCategory === 'vocab') {
+                pronBadge.classList.remove('hidden');
+                document.getElementById('question-romaji').textContent = currentItem.romaji;
             } else {
-                document.getElementById('question-prompt').innerText = 'Pilih Romaji yang tepat untuk karakter ini:';
+                pronBadge.classList.add('hidden');
             }
 
-            // Generate Options
+            // Speak audio once on start of question
+            speakJapaneseText(currentItem.char);
+
+            // Generate 4 options
+            generateOptions(currentItem);
+        }
+
+        function repeatQuestionAudio() {
+            if (quizQueue[currentQuizIndex]) {
+                speakJapaneseText(quizQueue[currentQuizIndex].char);
+            }
+        }
+
+        function generateOptions(correctItem) {
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
-
-            const options = generateOptions(qData);
-            options.forEach(opt => {
+            
+            // Get wrong distractors
+            const distractors = dataset.filter(item => item.romaji !== correctItem.romaji);
+            const shuffledDistractors = shuffleArray(distractors).slice(0, 3);
+            
+            // Combine correct option & distractors, then shuffle
+            const options = shuffleArray([correctItem, ...shuffledDistractors]);
+            
+            options.forEach(option => {
                 const btn = document.createElement('button');
-                btn.className = 'option-btn bg-white hover:bg-slate-50 border border-slate-200 hover:border-indigo-300 text-slate-700 font-semibold p-4 rounded-xl shadow-sm text-center flex flex-col items-center justify-center min-h-[70px]';
+                btn.className = "option-btn w-full p-4 bg-white/90 hover:bg-white rounded-2xl border border-slate-200 text-center text-slate-800 font-extrabold shadow-sm transition-all text-sm flex flex-col items-center justify-center min-h-[70px]";
                 
-                if (currentMode === 'vocab') {
-                    btn.innerHTML = `<span class="text-sm">${opt.meaning}</span><span class="text-[10px] text-slate-400 font-normal">(${opt.romaji})</span>`;
+                // Show meaning for vocab quiz, or romaji for hiragana/katakana quiz
+                if (currentCategory === 'vocab') {
+                    btn.innerHTML = `<span>${option.meaning}</span>`;
                 } else {
-                    btn.innerHTML = `<span class="text-base font-bold">${opt.romaji}</span>`;
+                    btn.innerHTML = `<span class="text-base">${option.romaji}</span>`;
                 }
 
-                btn.onclick = () => checkAnswer(opt, qData, btn);
+                btn.onclick = () => checkAnswer(option, correctItem, btn);
                 optionsContainer.appendChild(btn);
             });
         }
 
-        function generateOptions(correctItem) {
-            let fullList = [];
-            if (currentMode === 'hiragana') fullList = HIRAGANA_DATA;
-            else if (currentMode === 'katakana') fullList = KATAKANA_DATA;
-            else if (currentMode === 'vocab') fullList = VOCAB_DATA;
+        function checkAnswer(selectedOption, correctItem, clickedBtn) {
+            if (isAnswered) return;
+            isAnswered = true;
 
-            // Filter out correct answer to get distractors
-            const distractors = fullList.filter(item => item.romaji !== correctItem.romaji)
-                                         .sort(() => Math.random() - 0.5)
-                                         .slice(0, 3);
-
-            const options = [correctItem, ...distractors];
-            return options.sort(() => Math.random() - 0.5);
-        }
-
-        function checkAnswer(selectedOpt, correctItem, clickedBtn) {
-            if (answerSubmitted) return;
-            answerSubmitted = true;
-
-            const isCorrect = selectedOpt.romaji === correctItem.romaji;
-            const optionsBtns = document.getElementById('options-container').children;
+            const isCorrect = (selectedOption.romaji === correctItem.romaji);
             const questionCard = document.getElementById('question-card');
+            const feedbackBanner = document.getElementById('feedback-banner');
+            const feedbackTitle = document.getElementById('feedback-title');
+            const feedbackDetail = document.getElementById('feedback-detail');
 
-            // Disable all option buttons
-            Array.from(optionsBtns).forEach(btn => {
+            // Disable option buttons
+            const allOptionBtns = document.querySelectorAll('.option-btn');
+            allOptionBtns.forEach(btn => {
                 btn.disabled = true;
-                btn.classList.remove('hover:bg-slate-50', 'hover:border-indigo-300');
+                btn.classList.add('opacity-75');
             });
 
             if (isCorrect) {
-                playSound('correct');
-                score += 10 + (streak * 2); // Streak Bonus
+                score += 10;
                 streak++;
                 if (streak > maxStreak) maxStreak = streak;
-                correctAnswersCount++;
-
-                clickedBtn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
-                clickedBtn.classList.remove('bg-white', 'text-slate-700');
+                
+                playSound(true);
                 questionCard.classList.add('animate-correct');
                 setTimeout(() => questionCard.classList.remove('animate-correct'), 400);
 
-                showFeedback(true, correctItem);
-            } else {
-                playSound('incorrect');
-                streak = 0;
+                clickedBtn.classList.remove('bg-white/90', 'hover:bg-white', 'border-slate-200');
+                clickedBtn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
 
-                clickedBtn.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
-                clickedBtn.classList.remove('bg-white', 'text-slate-700');
+                feedbackBanner.className = "p-4 rounded-2xl text-center space-y-1 bg-emerald-100 text-emerald-800 border border-emerald-200 block";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i> Tepat Sekali! (+10 Point)`;
+                feedbackDetail.innerHTML = `<p class="font-bold">${correctItem.char} = ${correctItem.romaji} (${correctItem.meaning})</p>`;
+            } else {
+                streak = 0;
+                playSound(false);
                 questionCard.classList.add('animate-shake');
                 setTimeout(() => questionCard.classList.remove('animate-shake'), 500);
 
-                // Highlight correct answer button
-                Array.from(optionsBtns).forEach(btn => {
-                    if (btn.innerText.includes(correctItem.romaji) || btn.innerText.includes(correctItem.meaning)) {
-                        btn.classList.add('bg-emerald-100', 'border-emerald-400', 'text-emerald-800');
+                clickedBtn.classList.remove('bg-white/90', 'hover:bg-white', 'border-slate-200');
+                clickedBtn.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
+
+                // Highlight correct button
+                allOptionBtns.forEach(btn => {
+                    const text = btn.innerText;
+                    if (text.includes(correctItem.romaji) || text.includes(correctItem.meaning)) {
+                        btn.classList.remove('bg-white/90', 'border-slate-200', 'opacity-75');
+                        btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600', 'opacity-100');
                     }
                 });
 
-                showFeedback(false, correctItem);
+                feedbackBanner.className = "p-4 rounded-2xl text-center space-y-1 bg-rose-100 text-rose-800 border border-rose-200 block";
+                feedbackTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 text-lg"></i> Kurang Tepat!`;
+                feedbackDetail.innerHTML = `<p class="font-bold">Jawaban benar: ${correctItem.char} = ${correctItem.romaji} (${correctItem.meaning})</p>`;
             }
 
-            document.getElementById('score-val').innerText = score;
-            document.getElementById('streak-val').innerText = streak;
-        }
-
-        function showFeedback(isCorrect, correctItem) {
-            const banner = document.getElementById('feedback-banner');
-            const title = document.getElementById('feedback-title');
-            const detail = document.getElementById('feedback-detail');
-
-            banner.classList.remove('hidden', 'bg-emerald-50', 'bg-rose-50', 'text-emerald-800', 'text-rose-800', 'border-emerald-200', 'border-rose-200');
-
-            if (isCorrect) {
-                banner.classList.add('bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200');
-                title.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500 text-lg"></i> Jawaban Benar! (+${10 + ((streak - 1) * 2)})`;
-            } else {
-                banner.classList.add('bg-rose-50', 'text-rose-800', 'border', 'border-rose-200');
-                title.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i> Kurang Tepat!`;
-            }
-
-            detail.innerHTML = `
-                <p><strong>Karakter:</strong> ${correctItem.char} &nbsp;|&nbsp; <strong>Romaji:</strong> ${correctItem.romaji}</p>
-                <p class="text-slate-500"><strong>Arti/Info:</strong> ${correctItem.meaning}</p>
-            `;
-
-            // Adjust next button label if end of game
-            if (currentIndex === totalQuestions - 1) {
-                document.getElementById('next-btn').innerHTML = 'Lihat Hasil Akhir <i class="fa-solid fa-trophy ml-1"></i>';
-            } else {
-                document.getElementById('next-btn').innerHTML = 'Lanjut Soal Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>';
-            }
+            document.getElementById('score-val').textContent = score;
+            document.getElementById('streak-val').textContent = streak;
         }
 
         function nextQuestion() {
-            currentIndex++;
-            if (currentIndex < totalQuestions) {
+            currentQuizIndex++;
+            if (currentQuizIndex < quizQueue.length) {
                 renderQuestion();
             } else {
                 showResults();
@@ -888,42 +916,37 @@
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
 
-            const accuracy = Math.round((correctAnswersCount / totalQuestions) * 100);
+            const totalScore = score;
+            const accuracy = Math.round((totalScore / (quizQueue.length * 10)) * 100);
 
-            document.getElementById('final-score').innerText = score;
-            document.getElementById('final-accuracy').innerText = `${accuracy}%`;
-            document.getElementById('final-streak').innerText = maxStreak;
+            document.getElementById('final-score').textContent = totalScore;
+            document.getElementById('final-accuracy').textContent = `${accuracy}%`;
+            document.getElementById('final-streak').textContent = maxStreak;
 
-            const badgeElem = document.getElementById('result-badge');
-            const subtitleElem = document.getElementById('result-subtitle');
+            const badge = document.getElementById('result-badge');
+            const subtitle = document.getElementById('result-subtitle');
 
             if (accuracy >= 80) {
-                badgeElem.className = "w-20 h-20 mx-auto rounded-full bg-emerald-100 text-emerald-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
-                badgeElem.innerHTML = '<i class="fa-solid fa-crown"></i>';
-                subtitleElem.innerText = 'Luar Biasa! Kamu sangat menguasai materi ini!';
+                badge.className = "w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
+                badge.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+                subtitle.textContent = "Luar biasa! Penguasaan materi kamu sangat hebat!";
             } else if (accuracy >= 50) {
-                badgeElem.className = "w-20 h-20 mx-auto rounded-full bg-amber-100 text-amber-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
-                badgeElem.innerHTML = '<i class="fa-solid fa-star"></i>';
-                subtitleElem.innerText = 'Bagus! Tingkatkan lagi latihanmu agar makin lancar!';
+                badge.className = "w-20 h-20 mx-auto rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
+                badge.innerHTML = '<i class="fa-solid fa-thumbs-up"></i>';
+                subtitle.textContent = "Bagus! Terus berlatih agar makin lancar!";
             } else {
-                badgeElem.className = "w-20 h-20 mx-auto rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
-                badgeElem.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>';
-                subtitleElem.innerText = 'Jangan menyerah! Ayo coba lagi dan perbaiki skor!';
+                badge.className = "w-20 h-20 mx-auto rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-3xl mb-3 shadow-inner";
+                badge.innerHTML = '<i class="fa-solid fa-seedling"></i>';
+                subtitle.textContent = "Jangan menyerah! Coba ulang mode belajar & kuis ini lagi.";
             }
         }
 
         function restartCurrentGame() {
-            startGame(currentMode);
-        }
-
-        function backToMenu() {
-            document.getElementById('mode-selection-screen').classList.remove('hidden');
-            document.getElementById('study-screen').classList.add('hidden');
-            document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.add('hidden');
+            startQuizMode();
         }
 
-        /* --- CUSTOM EXIT CONFIRMATION MODAL --- */
+        /* --- CUSTOM CONFIRM MODAL --- */
         function showCustomConfirm() {
             document.getElementById('custom-confirm-modal').classList.remove('hidden');
         }
@@ -935,6 +958,54 @@
         function confirmExit() {
             hideCustomConfirm();
             backToMenu();
+        }
+
+        /* --- AUDIO & SPEECH SYNTHESIS UTILS --- */
+        function speakCurrent(e) {
+            if (e) e.stopPropagation();
+            if (dataset[studyIndex]) {
+                speakJapaneseText(dataset[studyIndex].char);
+            }
+        }
+
+        function speakJapaneseText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop current speech
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ja-JP';
+                utterance.rate = 0.85; // Slightly slower for clarity
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function playSound(isCorrect) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (isCorrect) {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15); // E5
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                } else {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, ctx.currentTime); // A3
+                    osc.frequency.exponentialRampToValueAtTime(130, ctx.currentTime + 0.25);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                }
+            } catch (err) {
+                // Fallback silently if audio context is restricted
+            }
         }
     </script>
 </body>
